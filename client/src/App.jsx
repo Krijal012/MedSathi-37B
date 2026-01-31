@@ -1,9 +1,13 @@
 // src/App.jsx
+import { BrowserRouter } from "react-router-dom";
+import PublicRoutes from "./routes/PublicRoutes";
+
 function App() {
   return (
-    <h1 className="text-3xl font-bold underline text-center">
-      Hello world!
-    </h1>
+    <BrowserRouter>
+      <PublicRoutes />
+    </BrowserRouter>
   );
 }
+
 export default App;
