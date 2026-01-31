@@ -1,7 +1,7 @@
 import Background from "../../assets/background.jpg";
 import logo from "../../assets/logo.jpg";
 
-export function LoginHero() {
+export function ForgotPassHero() {
     return (
         <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-teal-400 to-teal-600 relative overflow-hidden">
             {/* Background Pattern */}
@@ -20,12 +20,12 @@ export function LoginHero() {
 
                 {/* Heading */}
                 <h1 className="text-4xl md:text-5xl font-bold text-center mb-4">
-                    Your Health, Our Priority
+                    Password Recovery
                 </h1>
 
                 {/* Description */}
                 <p className="text-lg text-left max-w-md opacity-90">
-                    Experience seamless healthcare management with our comprehensive hospital management system.
+                    Don't worry, it happens to the best of us. We 'll help <br /> you get back into your account.
                 </p>
             </div>
         </div>

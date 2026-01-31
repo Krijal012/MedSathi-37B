@@ -7,7 +7,7 @@ function Register() {
             {/* Left Side - Hero Section */}
             <RegisterHero />
 
-            {/* Right Side - Login Form */}
+            {/* Right Side - Register Form */}
             <div className="w-full lg:w-1/2 flex items-center justify-center bg-gray-100 p-8">
                 <RegisterForm />
             </div>

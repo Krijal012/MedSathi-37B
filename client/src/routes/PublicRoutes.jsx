@@ -4,8 +4,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 // lazy pages
 const Login = lazy(() => import("../pages/Public/Login"));
 const Register = lazy(() => import("../pages/Public/Register"));
-// const ForgotPassword = lazy(() => import("../pages/Public/ForgotPassword"));
-// const ResetPassword = lazy(() => import("../pages/Public/ResetPassword"));
+const ForgotPassword = lazy(() => import("../pages/Public/ForgotPass"));
+const ResetPassword = lazy(() => import("../pages/Public/ResetPass"));
 
 const PublicRoutes = () => {
     return (
@@ -20,8 +20,8 @@ const PublicRoutes = () => {
                 <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
-                {/* <Route path="/forgot-password" element={<ForgotPassword />} /> */}
-                {/* <Route path="/reset-password/:token" element={<ResetPassword />} /> */}
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
 
                 {/* fallback */}
                 <Route path="*" element={<Navigate to="/login" replace />} />

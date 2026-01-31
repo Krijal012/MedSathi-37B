@@ -5,7 +5,7 @@ export function RegisterHero() {
     return (
         <div className="hidden lg:flex lg:w-1/2 bg-gradient-to-br from-teal-400 to-teal-600 relative overflow-hidden">
             {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0 opacity-50">
                 <img src={Background} alt="Background" className="w-full h-full object-cover" />
             </div>
 
