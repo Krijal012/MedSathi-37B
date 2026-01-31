@@ -49,9 +49,9 @@ export function LoginForm() {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+        <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 w-full max-w-md">
             {/* Header */}
-            <h2 className="text-3xl font-bold text-center mb-2">Welcome Back</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-center mb-2">Welcome Back</h2>
             <p className="text-gray-600 text-center mb-6">
                 Login to access your healthcare portal
             </p>

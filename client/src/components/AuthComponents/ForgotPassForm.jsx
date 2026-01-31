@@ -47,9 +47,9 @@ export function ForgotPassForm() {
     };
 
     return (
-        <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+        <div className="bg-white rounded-lg shadow-lg p-6 md:p-8 w-full max-w-md">
             {/* Header */}
-            <h2 className="text-3xl font-bold text-left mb-2">Forgot Password</h2>
+            <h2 className="text-2xl md:text-3xl font-bold text-left mb-2">Forgot Password</h2>
             <p className="text-gray-600 text-left mb-6">
                 Enter your email address and we'll send you a reset link
             </p>
