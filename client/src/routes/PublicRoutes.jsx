@@ -9,6 +9,7 @@ const Register = lazy(() => import("../pages/Public/Register"));
 const ForgotPassword = lazy(() => import("../pages/Public/ForgotPass"));
 const ResetPassword = lazy(() => import("../pages/Public/ResetPass"));
 const PatientDashboard = lazy(() => import("../pages/Private/PatientDashboard"));
+const StaffDashboard = lazy(() => import("../pages/Private/StaffDashboard"));
 
 const PublicRoutes = () => {
     return (
@@ -29,6 +30,7 @@ const PublicRoutes = () => {
                 {/* Protected Routes */}
                 <Route element={<PrivateRoutes />}>
                     <Route path="/patient-dashboard" element={<PatientDashboard />} />
+                    <Route path="/staff-dashboard" element={<StaffDashboard />} />
                 </Route>
 
                 {/* fallback */}
