@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { RegisterSchema } from '../../schema/register.schema';
 
 export function RegisterForm() {
@@ -34,7 +35,7 @@ export function RegisterForm() {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     const result = RegisterSchema.safeParse(formData);
@@ -49,8 +50,20 @@ export function RegisterForm() {
     }
 
     setErrors({});
-    console.log('Register data:', formData);
-    // Add your register API call here
+
+    try {
+      await axios.post('http://localhost:5000/api/auth/register', formData);
+      // Redirect to login on success
+      navigate('/login');
+    } catch (error) {
+      if (error.response && error.response.data) {
+        // If server returns specific field error, mapping it could be tricky if names differ, 
+        // but for now we'll put general errors under email or a general alert.
+        setErrors(prev => ({ ...prev, email: error.response.data.message }));
+      } else {
+        setErrors(prev => ({ ...prev, email: "An error occurred during registration." }));
+      }
+    }
   };
 
   return (

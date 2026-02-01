@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import { LoginSchema } from '../../schema/login.schema';
 
 export function LoginForm() {
@@ -29,7 +30,7 @@ export function LoginForm() {
     };
 
     // Handle form submission
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const result = LoginSchema.safeParse(formData);
@@ -44,8 +45,23 @@ export function LoginForm() {
         }
 
         setErrors({});
-        console.log('Login data:', formData);
-        // Add your login API call here
+
+        try {
+            const response = await axios.post('http://localhost:5000/api/auth/login', formData);
+
+            // Store token and user data
+            localStorage.setItem('token', response.data.token);
+            localStorage.setItem('user', JSON.stringify(response.data.user));
+
+            // Navigate to dashboard or home based on role (can be enhanced later)
+            navigate('/patient-dashboard');
+        } catch (error) {
+            if (error.response && error.response.data) {
+                setErrors({ email: error.response.data.message }); // Show general error under email or add a general error state
+            } else {
+                setErrors({ email: "An error occurred. Please try again." });
+            }
+        }
     };
 
     return (

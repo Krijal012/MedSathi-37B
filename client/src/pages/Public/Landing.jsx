@@ -6,11 +6,28 @@ function Landing() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 flex flex-col relative overflow-hidden">
-            {/* Animated Background Elements */}
+            {/* Animated Background Shapes */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/20 rounded-full blur-3xl animate-float" />
-                <div className="absolute bottom-20 right-10 w-96 h-96 bg-teal-400/20 rounded-full blur-3xl animate-float-delayed" />
-                <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan-400/15 rounded-full blur-3xl animate-float-slow" />
+                {/* Blue Circle */}
+                <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400/30 rounded-full blur-3xl animate-float" />
+
+                {/* Teal Square */}
+                <div className="absolute bottom-20 right-10 w-80 h-80 bg-teal-400/25 rotate-45 blur-3xl animate-float-delayed" />
+
+                {/* Cyan Circle */}
+                <div className="absolute top-1/2 left-1/2 w-64 h-64 bg-cyan-400/20 rounded-full blur-3xl animate-float-slow" />
+
+                {/* Purple Triangle-ish shape */}
+                <div className="absolute top-40 right-1/4 w-60 h-60 bg-purple-400/20 rounded-3xl rotate-12 blur-2xl animate-float-reverse" />
+
+                {/* Pink Circle */}
+                <div className="absolute bottom-40 left-1/4 w-56 h-56 bg-pink-400/25 rounded-full blur-3xl animate-float-slow-delayed" />
+
+                {/* Green Square */}
+                <div className="absolute top-1/3 right-20 w-48 h-48 bg-green-400/20 rotate-45 blur-2xl animate-float-fast" />
+
+                {/* Orange Circle */}
+                <div className="absolute bottom-1/3 left-1/3 w-52 h-52 bg-orange-400/20 rounded-full blur-3xl animate-float-medium" />
             </div>
 
             {/* Navigation */}
@@ -115,13 +132,13 @@ function Landing() {
 
                 @keyframes float-delayed {
                     0%, 100% {
-                        transform: translate(0, 0) scale(1);
+                        transform: translate(0, 0) scale(1) rotate(45deg);
                     }
                     33% {
-                        transform: translate(-40px, 30px) scale(1.05);
+                        transform: translate(-40px, 30px) scale(1.05) rotate(60deg);
                     }
                     66% {
-                        transform: translate(25px, -25px) scale(0.95);
+                        transform: translate(25px, -25px) scale(0.95) rotate(30deg);
                     }
                 }
 
@@ -131,6 +148,51 @@ function Landing() {
                     }
                     50% {
                         transform: translate(20px, -40px) scale(1.08);
+                    }
+                }
+
+                @keyframes float-reverse {
+                    0%, 100% {
+                        transform: translate(0, 0) scale(1) rotate(12deg);
+                    }
+                    33% {
+                        transform: translate(-25px, 35px) scale(1.05) rotate(25deg);
+                    }
+                    66% {
+                        transform: translate(30px, -20px) scale(0.95) rotate(-5deg);
+                    }
+                }
+
+                @keyframes float-slow-delayed {
+                    0%, 100% {
+                        transform: translate(0, 0) scale(1);
+                    }
+                    40% {
+                        transform: translate(35px, -25px) scale(1.1);
+                    }
+                    80% {
+                        transform: translate(-15px, 30px) scale(0.9);
+                    }
+                }
+
+                @keyframes float-fast {
+                    0%, 100% {
+                        transform: translate(0, 0) scale(1) rotate(45deg);
+                    }
+                    50% {
+                        transform: translate(-30px, 30px) scale(1.15) rotate(70deg);
+                    }
+                }
+
+                @keyframes float-medium {
+                    0%, 100% {
+                        transform: translate(0, 0) scale(1);
+                    }
+                    33% {
+                        transform: translate(20px, 30px) scale(1.05);
+                    }
+                    66% {
+                        transform: translate(-25px, -20px) scale(0.95);
                     }
                 }
 
@@ -144,6 +206,22 @@ function Landing() {
 
                 .animate-float-slow {
                     animation: float-slow 30s ease-in-out infinite;
+                }
+
+                .animate-float-reverse {
+                    animation: float-reverse 22s ease-in-out infinite;
+                }
+
+                .animate-float-slow-delayed {
+                    animation: float-slow-delayed 28s ease-in-out infinite;
+                }
+
+                .animate-float-fast {
+                    animation: float-fast 18s ease-in-out infinite;
+                }
+
+                .animate-float-medium {
+                    animation: float-medium 24s ease-in-out infinite;
                 }
             `}</style>
         </div>
