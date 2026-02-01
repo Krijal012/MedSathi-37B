@@ -2,9 +2,11 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { LoginSchema } from '../../schema/login.schema';
+import useAuth from '../../hooks/useAuth';
 
 export function LoginForm() {
     const navigate = useNavigate();
+    const { login } = useAuth();
 
     // Form state
     const [formData, setFormData] = useState({
@@ -49,8 +51,10 @@ export function LoginForm() {
         try {
             const response = await axios.post('http://localhost:5000/api/auth/login', formData);
 
-            // Store token and user data
-            localStorage.setItem('token', response.data.token);
+            // Store token using auth context
+            login(response.data.token);
+
+            // Store user data
             localStorage.setItem('user', JSON.stringify(response.data.user));
 
             // Navigate to dashboard or home based on role (can be enhanced later)

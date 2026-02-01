@@ -1,5 +1,6 @@
 import { Suspense, lazy } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
+import PrivateRoutes from "./PrivateRoutes";
 
 // lazy pages
 const Landing = lazy(() => import("../pages/Public/Landing"));
@@ -24,12 +25,16 @@ const PublicRoutes = () => {
                 <Route path="/register" element={<Register />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPassword />} />
-                <Route path="/patient-dashboard" element={<PatientDashboard />} />
+
+                {/* Protected Routes */}
+                <Route element={<PrivateRoutes />}>
+                    <Route path="/patient-dashboard" element={<PatientDashboard />} />
+                </Route>
 
                 {/* fallback */}
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
-        </Suspense>
+        </Suspense >
     );
 };
 
