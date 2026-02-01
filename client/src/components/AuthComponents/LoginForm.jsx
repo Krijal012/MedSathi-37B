@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { LoginSchema } from '../../schema/login.schema';
 import useAuth from '../../hooks/useAuth';
+import toast from 'react-hot-toast';
 
 export function LoginForm() {
     const navigate = useNavigate();
@@ -57,6 +58,9 @@ export function LoginForm() {
             // Store user data
             localStorage.setItem('user', JSON.stringify(response.data.user));
 
+            // Show success toast
+            toast.success('Login successful! Redirecting...');
+
             // Navigate to dashboard based on user role
             const userRole = response.data.user.role;
             if (userRole === 'Staff' || userRole === 'Admin') {
@@ -70,9 +74,11 @@ export function LoginForm() {
             }
         } catch (error) {
             if (error.response && error.response.data) {
-                setErrors({ email: error.response.data.message }); // Show general error under email or add a general error state
+                setErrors({ email: error.response.data.message });
+                toast.error(error.response.data.message || 'Login failed');
             } else {
                 setErrors({ email: "An error occurred. Please try again." });
+                toast.error('An error occurred. Please try again.');
             }
         }
     };

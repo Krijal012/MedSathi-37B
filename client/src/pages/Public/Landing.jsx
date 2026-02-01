@@ -6,7 +6,7 @@ function Landing() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-teal-50 flex flex-col relative overflow-hidden">
-            
+
             {/* Animated Background Shapes (responsive + optimized) */}
             <div className="absolute inset-0 overflow-hidden pointer-events-none">
                 <div className="hidden sm:block absolute top-20 left-10 w-40 h-40 sm:w-72 sm:h-72 bg-blue-400/30 rounded-full blur-3xl animate-float" />
@@ -32,13 +32,13 @@ function Landing() {
                         <div className="flex items-center space-x-2 sm:space-x-4">
                             <button
                                 onClick={() => navigate('/login')}
-                                className="px-3 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base text-gray-700 hover:text-blue-600 transition"
+                                className="px-3 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base text-gray-700 hover:text-blue-600 transition cursor-pointer"
                             >
                                 Login
                             </button>
                             <button
                                 onClick={() => navigate('/register')}
-                                className="px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                                className="px-4 py-1.5 sm:px-6 sm:py-2 text-sm sm:text-base bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition cursor-pointer"
                             >
                                 Sign Up
                             </button>
@@ -66,13 +66,13 @@ function Landing() {
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-4">
                         <button
                             onClick={() => navigate('/register')}
-                            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-xl text-base sm:text-lg font-semibold hover:shadow-lg transition"
+                            className="px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-600 to-teal-600 text-white rounded-xl text-base sm:text-lg font-semibold hover:shadow-lg transition cursor-pointer"
                         >
                             Get Started
                         </button>
                         <button
                             onClick={() => navigate('/login')}
-                            className="px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl text-base sm:text-lg font-semibold hover:border-blue-300 transition"
+                            className="px-6 sm:px-8 py-3 sm:py-4 bg-white border-2 border-gray-200 rounded-xl text-base sm:text-lg font-semibold hover:border-blue-300 transition cursor-pointer"
                         >
                             Sign In
                         </button>

@@ -30,7 +30,7 @@ const StaffSidebar = () => {
                     <button
                         key={item.path}
                         onClick={() => navigate(item.path)}
-                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive(item.path)
+                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors cursor-pointer ${isActive(item.path)
                             ? 'bg-blue-600 text-white'
                             : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                             }`}

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { RegisterSchema } from '../../schema/register.schema';
+import toast from 'react-hot-toast';
 
 export function RegisterForm() {
   const navigate = useNavigate();
@@ -53,15 +54,21 @@ export function RegisterForm() {
 
     try {
       await axios.post('http://localhost:5000/api/auth/register', formData);
+
+      // Show success toast
+      toast.success('Registration successful! Redirecting to login...');
+
       // Redirect to login on success
-      navigate('/login');
+      setTimeout(() => {
+        navigate('/login');
+      }, 1000);
     } catch (error) {
       if (error.response && error.response.data) {
-        // If server returns specific field error, mapping it could be tricky if names differ, 
-        // but for now we'll put general errors under email or a general alert.
         setErrors(prev => ({ ...prev, email: error.response.data.message }));
+        toast.error(error.response.data.message || 'Registration failed');
       } else {
         setErrors(prev => ({ ...prev, email: "An error occurred during registration." }));
+        toast.error('An error occurred during registration.');
       }
     }
   };
