@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from '../../components/PatientComponents/Sidebar';
+import { Sidebar } from '../../components/PatientComponents/Sidebar';
 import Header from '../../components/PatientComponents/Header';
 import StatCard from '../../components/PatientComponents/Statcard';
 import AppointmentCard from '../../components/PatientComponents/AppointmentCard';
