@@ -57,8 +57,17 @@ export function LoginForm() {
             // Store user data
             localStorage.setItem('user', JSON.stringify(response.data.user));
 
-            // Navigate to dashboard or home based on role (can be enhanced later)
-            navigate('/patient-dashboard');
+            // Navigate to dashboard based on user role
+            const userRole = response.data.user.role;
+            if (userRole === 'Staff' || userRole === 'Admin') {
+                navigate('/staff-dashboard');
+            } else if (userRole === 'Pharmacist') {
+                navigate('/pharmacist-dashboard');
+            } else if (userRole === 'Patient') {
+                navigate('/patient-dashboard');
+            } else {
+                navigate('/patient-dashboard'); // Default fallback
+            }
         } catch (error) {
             if (error.response && error.response.data) {
                 setErrors({ email: error.response.data.message }); // Show general error under email or add a general error state
