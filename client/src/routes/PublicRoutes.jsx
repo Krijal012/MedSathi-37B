@@ -13,6 +13,7 @@ const StaffDashboard = lazy(() => import("../pages/Private/StaffDashboard"));
 const PharmacistDashboard = lazy(() => import("../pages/Private/PharmacistDashboard"));
 const BookAppointment = lazy(() => import("../pages/Private/BookAppointment"));
 const MyAppointments = lazy(() => import("../pages/Private/MyAppointments"));
+const MedicalHistory = lazy(() => import("../pages/Private/MedicalHistory"));
 
 const PublicRoutes = () => {
     return (
@@ -35,6 +36,7 @@ const PublicRoutes = () => {
                     <Route path="/patient-dashboard" element={<PatientDashboard />} />
                     <Route path="/book-appointment" element={<BookAppointment />} />
                     <Route path="/my-appointments" element={<MyAppointments />} />
+                    <Route path="/medical-history" element={<MedicalHistory />} />
                     <Route path="/staff-dashboard" element={<StaffDashboard />} />
                     <Route path="/pharmacist-dashboard" element={<PharmacistDashboard />} />
                 </Route>
