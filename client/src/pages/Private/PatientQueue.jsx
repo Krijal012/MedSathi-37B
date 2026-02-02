@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StaffSidebar from '../../components/StaffComponents/StaffSideBar';
 import StaffHeader from '../../components/StaffComponents/StaffHeader';
 import PatientQueueItem from '../../components/StaffComponents/PatientQueueItem';
 
 const PatientQueue = () => {
-    // Sample queue data
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
     const queueList = [
         {
             id: 1,
@@ -57,19 +60,15 @@ const PatientQueue = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <StaffSidebar />
+            <StaffSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col">
-                {/* Header */}
-                <StaffHeader staffName="Staff User" />
+            <div className="flex-1 flex flex-col lg:ml-64">
+                <StaffHeader staffName="Staff User" toggleSidebar={toggleSidebar} />
 
-                {/* Page Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-800">Patient Queue</h1>
+                    <div className="mb-6 sm:mb-8">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Patient Queue</h1>
                         <p className="text-gray-500">Manage patient waiting queue</p>
                     </div>
 

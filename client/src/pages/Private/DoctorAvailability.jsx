@@ -7,6 +7,8 @@ import DoctorAvailabilityCard from '../../components/PatientComponents/DoctorAva
 const DoctorAvailability = () => {
     const navigate = useNavigate();
     const [selectedFilter, setSelectedFilter] = useState('All');
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
     // Sample doctors data
     const doctors = [
@@ -83,15 +85,11 @@ const DoctorAvailability = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <Sidebar />
+            <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col">
-                {/* Header */}
-                <Header patientName="John Doe" />
+            <div className="flex-1 flex flex-col lg:ml-64">
+                <Header patientName="John Doe" toggleSidebar={toggleSidebar} />
 
-                {/* Page Content */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
                     <div className="mb-4 sm:mb-6">

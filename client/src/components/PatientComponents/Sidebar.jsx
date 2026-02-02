@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 
-export const Sidebar = () => {
+export const Sidebar = ({ isOpen, toggleSidebar }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const menuItems = [
         { name: 'Dashboard', path: '/patient-dashboard', icon: '🏠' },
@@ -17,62 +15,22 @@ export const Sidebar = () => {
 
     const isActive = (path) => location.pathname === path;
 
-    // Close mobile menu when screen size changes to desktop
-    useEffect(() => {
-        const handleResize = () => {
-            if (window.innerWidth >= 768) {
-                setIsMobileMenuOpen(false);
-            }
-        };
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, []);
-
     return (
         <>
-            {/* Mobile Menu Button */}
-            <button
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="
-                    fixed 
-                    top-4 left-4 
-                    z-50 
-                    md:hidden 
-                    bg-gray-800 
-                    text-white 
-                    p-2 
-                    rounded-lg
-                    shadow-lg
-                "
-                aria-label="Toggle menu"
-            >
-                {isMobileMenuOpen ? '✕' : '☰'}
-            </button>
-
             {/* Overlay for mobile */}
-            {isMobileMenuOpen && (
-                <div
-                    className="
-                        fixed 
-                        inset-0 
-                        bg-black bg-opacity-50 
-                        z-40 
-                        md:hidden
-                    "
-                    onClick={() => setIsMobileMenuOpen(false)}
-                />
-            )}
+            <div
+                className={`fixed inset-0 bg-black/50 z-30 lg:hidden transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                onClick={toggleSidebar}
+            ></div>
 
             {/* Sidebar */}
             <div className={`
-                ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
-                md:translate-x-0
+                ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+                lg:translate-x-0
                 fixed 
-                md:relative
                 top-0 left-0 
                 w-64 
-                h-screen
+                h-full
                 bg-gray-800 
                 text-white 
                 flex flex-col 
@@ -82,14 +40,7 @@ export const Sidebar = () => {
                 ease-in-out
             `}>
                 {/* Logo */}
-                <div className="
-                    p-4 
-                    md:p-6 
-                    flex items-center 
-                    space-x-3 
-                    border-b 
-                    border-gray-700
-                ">
+                <Link to="/patient-dashboard" className="p-6 flex items-center space-x-3 border-b border-gray-700 hover:bg-gray-700 transition-colors">
                     <div className="
                         w-8 h-8 
                         md:w-10 md:h-10 
@@ -111,52 +62,28 @@ export const Sidebar = () => {
                     ">
                         MedSathi
                     </span>
-                </div>
+                </Link>
 
                 {/* Menu Items */}
-                <nav className="
-                    flex-1 p-3 
-                    md:p-4 
-                    space-y-1 
-                    md:space-y-2
-                    overflow-y-auto
-                ">
+                <nav className="flex-1 p-4 space-y-2">
                     {menuItems.map((item) => (
-                        <button
+                        <NavLink
                             key={item.path}
-                            onClick={() => {
-                                navigate(item.path);
-                                setIsMobileMenuOpen(false);
-                            }}
-                            className={`
-                                w-full 
-                                flex items-center 
-                                space-x-3 
-                                px-3 py-2.5 
-                                md:px-4 md:py-3 
-                                rounded-lg 
-                                transition-colors 
-                                cursor-pointer
-                                text-sm 
-                                md:text-base
-                                ${isActive(item.path)
+                            to={item.path}
+                            onClick={toggleSidebar} // Close sidebar on mobile nav click
+                            className={({ isActive }) => `w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive
                                     ? 'bg-blue-600 text-white'
                                     : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                                 }
                             `}
                         >
-                            <span className="
-                                text-xl 
-                                md:text-2xl 
-                                w-6 
-                                md:w-auto
-                            ">
+                            <span className="text-2xl w-6 text-center">
                                 {item.icon}
                             </span>
                             <span className="font-medium truncate">
                                 {item.name}
                             </span>
-                        </button>
+                        </NavLink>
                     ))}
                 </nav>
 

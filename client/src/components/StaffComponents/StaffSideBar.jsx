@@ -1,16 +1,22 @@
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.jpg";
 
-const StaffSidebar = () => {
+const StaffSidebar = ({ isOpen, toggleSidebar }) => {
     const menuItems = [
         { name: 'Dashboard', path: '/staff-dashboard', icon: '🏠' },
         { name: 'Doctor Schedule', path: '/doctor-schedule', icon: '📅' },
         { name: 'Patient Records', path: '/patient-records', icon: '📁' },
         { name: 'Patient Queue', path: '/patient-queue', icon: '⏱️' },
     ];
-
     return (
-        <div className="w-64 bg-gray-800 min-h-screen text-white flex flex-col">
+        <>
+            {/* Overlay for mobile */}
+            <div
+                className={`fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                onClick={toggleSidebar}
+            ></div>
+            
+            <div className={`fixed top-0 left-0 h-full w-64 bg-gray-800 text-white flex flex-col z-40 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} transition-transform duration-300 ease-in-out lg:translate-x-0 lg:fixed`}>
             {/* Logo */}
             <Link to="/staff-dashboard" className="p-6 flex items-center space-x-3 border-b border-gray-700 hover:bg-gray-700 transition-colors">
                 <div className="w-10 h-10 rounded-lg overflow-hidden">
@@ -41,7 +47,8 @@ const StaffSidebar = () => {
                 © 2026 MedSathi
             </div>
         </div>
-    )
-}
+        </>
+    );
+};
 
 export default StaffSidebar;

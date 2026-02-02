@@ -1,9 +1,13 @@
+import { useState } from 'react';
 import StaffSidebar from '../../components/StaffComponents/StaffSideBar';
 import StaffHeader from '../../components/StaffComponents/StaffHeader';
 import DoctorScheduleCard from '../../components/StaffComponents/DoctorScheduleCard';
 
 const DoctorSchedules = () => {
-    // Sample doctors schedule data
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
     const doctors = [
         {
             id: 1,
@@ -74,19 +78,15 @@ const DoctorSchedules = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <StaffSidebar />
+            <StaffSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col">
-                {/* Header */}
-                <StaffHeader staffName="Admin User" />
+            <div className="flex-1 flex flex-col lg:ml-64">
+                <StaffHeader staffName="Admin User" toggleSidebar={toggleSidebar} />
 
-                {/* Page Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-800">Doctor Schedules</h1>
+                    <div className="mb-6 sm:mb-8">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Doctor Schedules</h1>
                         <p className="text-gray-500">Manage doctor working hours</p>
                     </div>
 

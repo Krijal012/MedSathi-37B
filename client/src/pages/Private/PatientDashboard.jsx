@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../components/PatientComponents/Sidebar';
 import Header from '../../components/PatientComponents/Header';
@@ -7,7 +7,9 @@ import AppointmentCard from '../../components/PatientComponents/AppointmentCard'
 import HealthMetricCard from '../../components/PatientComponents/HealthMetricCard';
 
 const PatientDashboard = () => {
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
     const navigate = useNavigate();
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
     // Sample data
     const stats = [
@@ -46,15 +48,11 @@ const PatientDashboard = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <Sidebar />
+            <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col">
-                {/* Header */}
-                <Header patientName="John Doe" />
+            <div className="flex-1 flex flex-col lg:ml-64">
+                <Header patientName="John Doe" toggleSidebar={toggleSidebar} />
 
-                {/* Dashboard Content */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
                     <div className="mb-4 sm:mb-6">

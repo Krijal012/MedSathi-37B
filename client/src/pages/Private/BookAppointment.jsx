@@ -8,6 +8,8 @@ import TimeSlot from '../../components/PatientComponents/TimeSlot';
 const BookAppointment = () => {
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedDoctor, setSelectedDoctor] = useState(null);
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
     const [reason, setReason] = useState('');
@@ -55,15 +57,11 @@ const BookAppointment = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <Sidebar />
+            <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col">
-                {/* Header */}
-                <Header patientName="John Doe" />
+            <div className="flex-1 flex flex-col lg:ml-64">
+                <Header patientName="John Doe" toggleSidebar={toggleSidebar} />
 
-                {/* Appointment Content */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
                     <div className="mb-4 sm:mb-6 lg:mb-8">

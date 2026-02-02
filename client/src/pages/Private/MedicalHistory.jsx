@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Sidebar } from '../../components/PatientComponents/Sidebar';
 import Header from '../../components/PatientComponents/Header';
 import StatCard from '../../components/PatientComponents/StatCard';
 import MedicalRecordCard from '../../components/PatientComponents/MedicalRecordCard';
 
 const MedicalHistory = () => {
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
     // Stats data
     const stats = [
         { title: 'Total Records', value: '4', icon: '📄', iconColor: 'text-blue-500' },
@@ -64,15 +67,11 @@ const MedicalHistory = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <Sidebar />
+            <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col">
-                {/* Header */}
-                <Header patientName="John Doe" />
+            <div className="flex-1 flex flex-col lg:ml-64">
+                <Header patientName="John Doe" toggleSidebar={toggleSidebar} />
 
-                {/* Page Content */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
                     <div className="mb-4 sm:mb-6">

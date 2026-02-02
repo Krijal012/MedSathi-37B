@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import StaffSidebar from '../../components/StaffComponents/StaffSideBar';
 import StaffHeader from '../../components/StaffComponents/StaffHeader';
 import StaffStatCard from '../../components/StaffComponents/StaffStatCard';
 import StaffQueueCard from '../../components/StaffComponents/StaffQueueCard';
 
 const StaffDashboard = () => {
-    // Sample data
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
     const stats = [
         { title: 'Patients Queue', value: '20', icon: '👥', iconColor: 'text-gray-600' },
         { title: 'In Queue', value: '8', icon: '⏱️', iconColor: 'text-green-500' },
@@ -46,19 +49,15 @@ const StaffDashboard = () => {
 
     return (
         <div className="flex min-h-screen bg-gray-100">
-            {/* Sidebar */}
-            <StaffSidebar />
+            <StaffSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
-            {/* Main Content */}
-            <div className="flex-1 flex flex-col">
-                {/* Header */}
-                <StaffHeader staffName="Staff User" />
+            <div className="flex-1 flex flex-col lg:ml-64">
+                <StaffHeader staffName="Staff User" toggleSidebar={toggleSidebar} />
 
-                {/* Dashboard Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
-                    <div className="mb-6">
-                        <h1 className="text-3xl font-bold text-gray-800">Staff Dashboard</h1>
+                    <div className="mb-6 sm:mb-8">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Staff Dashboard</h1>
                         <p className="text-gray-500">Manage patient flow and doctor schedules</p>
                     </div>
 
@@ -76,8 +75,8 @@ const StaffDashboard = () => {
                     </div>
 
                     {/* Current Queue Section */}
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-                        <h2 className="text-2xl font-bold text-gray-800 mb-6">Current Queue</h2>
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Current Queue</h2>
                         <div className="space-y-4">
                             {queueData.map((queue, index) => (
                                 <StaffQueueCard
