@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Sidebar } from '../../components/PatientComponents/Sidebar';
 import Header from '../../components/PatientComponents/Header';
 import StatCard from '../../components/PatientComponents/Statcard';
@@ -6,6 +7,8 @@ import AppointmentCard from '../../components/PatientComponents/AppointmentCard'
 import HealthMetricCard from '../../components/PatientComponents/HealthMetricCard';
 
 const PatientDashboard = () => {
+    const navigate = useNavigate();
+
     // Sample data
     const stats = [
         { title: 'Upcoming Appointments', value: '2', icon: '📅', iconColor: 'text-blue-500' },
@@ -78,7 +81,10 @@ const PatientDashboard = () => {
                         <div className="lg:col-span-2 bg-white rounded-lg shadow-sm border border-gray-100 p-6">
                             <div className="flex items-center justify-between mb-6">
                                 <h2 className="text-xl font-bold text-gray-800">Upcoming Appointments</h2>
-                                <button className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors cursor-pointer">
+                                <button
+                                    onClick={() => navigate('/book-appointment')}
+                                    className="px-4 py-2 bg-teal-500 text-white rounded-lg hover:bg-teal-600 transition-colors cursor-pointer"
+                                >
                                     Book New
                                 </button>
                             </div>

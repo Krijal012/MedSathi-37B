@@ -11,6 +11,7 @@ const ResetPassword = lazy(() => import("../pages/Public/ResetPass"));
 const PatientDashboard = lazy(() => import("../pages/Private/PatientDashboard"));
 const StaffDashboard = lazy(() => import("../pages/Private/StaffDashboard"));
 const PharmacistDashboard = lazy(() => import("../pages/Private/PharmacistDashboard"));
+const BookAppointment = lazy(() => import("../pages/Private/BookAppointment"));
 
 const PublicRoutes = () => {
     return (
@@ -31,6 +32,7 @@ const PublicRoutes = () => {
                 {/* Protected Routes */}
                 <Route element={<PrivateRoutes />}>
                     <Route path="/patient-dashboard" element={<PatientDashboard />} />
+                    <Route path="/book-appointment" element={<BookAppointment />} />
                     <Route path="/staff-dashboard" element={<StaffDashboard />} />
                     <Route path="/pharmacist-dashboard" element={<PharmacistDashboard />} />
                 </Route>
