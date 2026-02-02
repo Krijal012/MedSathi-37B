@@ -15,6 +15,9 @@ const BookAppointment = lazy(() => import("../pages/Private/BookAppointment"));
 const MyAppointments = lazy(() => import("../pages/Private/MyAppointments"));
 const MedicalHistory = lazy(() => import("../pages/Private/MedicalHistory"));
 const DoctorAvailability = lazy(() => import("../pages/Private/DoctorAvailability"));
+const DoctorSchedules = lazy(() => import("../pages/Private/DoctorSchedules"));
+const PatientQueue = lazy(() => import("../pages/Private/PatientQueue"));
+const PatientRecords = lazy(() => import("../pages/Private/PatientRecords"));
 
 const PublicRoutes = () => {
     return (
@@ -41,6 +44,9 @@ const PublicRoutes = () => {
                     <Route path="/doctor-availability" element={<DoctorAvailability />} />
                     <Route path="/staff-dashboard" element={<StaffDashboard />} />
                     <Route path="/pharmacist-dashboard" element={<PharmacistDashboard />} />
+                    <Route path="/doctor-schedule" element={<DoctorSchedules />} />
+                    <Route path="/patient-records" element={<PatientRecords />} />
+                    <Route path="/patient-queue" element={<PatientQueue />} />
                 </Route>
 
                 {/* fallback */}

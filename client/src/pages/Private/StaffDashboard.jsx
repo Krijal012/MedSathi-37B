@@ -52,7 +52,7 @@ const StaffDashboard = () => {
             {/* Main Content */}
             <div className="flex-1 flex flex-col">
                 {/* Header */}
-                <StaffHeader staffName="Admin User" />
+                <StaffHeader staffName="Staff User" />
 
                 {/* Dashboard Content */}
                 <main className="flex-1 p-8">
