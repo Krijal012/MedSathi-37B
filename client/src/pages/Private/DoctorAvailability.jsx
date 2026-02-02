@@ -92,22 +92,47 @@ const DoctorAvailability = () => {
                 <Header patientName="John Doe" />
 
                 {/* Page Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
-                    <div className="mb-6">
-                        <h1 className="text-3xl font-bold text-gray-800">Doctor Availability</h1>
-                        <p className="text-gray-500">Find available doctors and view their schedules</p>
+                    <div className="mb-4 sm:mb-6">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Doctor Availability</h1>
+                        <p className="text-gray-500 text-sm sm:text-base">
+                            Find available doctors and view their schedules
+                        </p>
                     </div>
 
                     {/* Search and Filter */}
-                    <div className="flex items-center space-x-4 mb-6">
+                    <div className="
+                        flex flex-col 
+                        sm:flex-row 
+                        items-stretch 
+                        sm:items-center 
+                        gap-3 sm:gap-4 
+                        mb-4 sm:mb-6
+                    ">
                         {/* Search Bar */}
-                        <div className="relative flex-1 max-w-md">
-                            <span className="absolute left-3 top-3 text-gray-400">🔍</span>
+                        <div className="relative flex-1">
+                            <span className="
+                                absolute 
+                                left-3 top-1/2 
+                                -translate-y-1/2 
+                                text-gray-400
+                            ">
+                                🔍
+                            </span>
                             <input
                                 type="text"
                                 placeholder="Search doctors..."
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                                className="
+                                    w-full 
+                                    pl-10 pr-4 
+                                    py-2.5 sm:py-3 
+                                    border border-gray-300 
+                                    rounded-lg 
+                                    focus:outline-none 
+                                    focus:border-blue-400
+                                    text-sm sm:text-base
+                                "
                             />
                         </div>
 
@@ -116,20 +141,44 @@ const DoctorAvailability = () => {
                             <select
                                 value={selectedFilter}
                                 onChange={(e) => setSelectedFilter(e.target.value)}
-                                className="px-6 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 bg-white cursor-pointer appearance-none pr-10"
+                                className="
+                                    w-full 
+                                    sm:w-auto
+                                    px-4 sm:px-6 
+                                    py-2.5 sm:py-3 
+                                    border border-gray-300 
+                                    rounded-lg 
+                                    focus:outline-none 
+                                    focus:border-blue-400 
+                                    bg-white 
+                                    cursor-pointer 
+                                    appearance-none 
+                                    pr-10
+                                    text-sm sm:text-base
+                                "
                             >
-                                <option value="All">All</option>
+                                <option value="All">All Specialties</option>
                                 <option value="Cardiologist">Cardiologist</option>
                                 <option value="Dentist">Dentist</option>
                                 <option value="Pediatrician">Pediatrician</option>
                                 <option value="General">General Physician</option>
+                                <option value="Dermatologist">Dermatologist</option>
+                                <option value="Orthopedic">Orthopedic</option>
                             </select>
-                            <span className="absolute right-3 top-4 text-gray-400 pointer-events-none">▼</span>
+                            <span className="
+                                absolute 
+                                right-3 top-1/2 
+                                -translate-y-1/2 
+                                text-gray-400 
+                                pointer-events-none
+                            ">
+                                ▼
+                            </span>
                         </div>
                     </div>
 
                     {/* Doctors List */}
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                         {doctors.map((doctor) => (
                             <DoctorAvailabilityCard
                                 key={doctor.id}

@@ -78,58 +78,107 @@ const MyAppointments = () => {
                 <Header patientName="John Doe" />
 
                 {/* Page Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
-                    <div className="mb-6">
-                        <h1 className="text-3xl font-bold text-gray-800">My Appointments</h1>
-                        <p className="text-gray-500">View and manage your appointments</p>
+                    <div className="mb-4 sm:mb-6">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">My Appointments</h1>
+                        <p className="text-gray-500 text-sm sm:text-base">
+                            View and manage your appointments
+                        </p>
                     </div>
 
                     {/* Search Bar */}
-                    <div className="mb-6">
-                        <div className="relative max-w-md">
-                            <span className="absolute left-3 top-3 text-gray-400">🔍</span>
+                    <div className="mb-4 sm:mb-6">
+                        <div className="relative max-w-full sm:max-w-md">
+                            <span className="
+                                absolute 
+                                left-3 top-1/2 
+                                -translate-y-1/2 
+                                text-gray-400
+                            ">
+                                🔍
+                            </span>
                             <input
                                 type="text"
                                 placeholder="Search by doctor or speciality..."
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                                className="
+                                    w-full 
+                                    pl-10 pr-4 
+                                    py-2.5 sm:py-3 
+                                    border border-gray-300 
+                                    rounded-lg 
+                                    focus:outline-none 
+                                    focus:border-blue-400
+                                    text-sm sm:text-base
+                                "
                             />
                         </div>
                     </div>
 
                     {/* Tabs */}
-                    <div className="flex space-x-4 mb-6">
+                    <div className="
+                        flex flex-col 
+                        sm:flex-row 
+                        gap-2 sm:gap-4 
+                        mb-4 sm:mb-6
+                        overflow-x-auto 
+                        pb-2
+                    ">
                         <button
                             onClick={() => setActiveTab('scheduled')}
-                            className={`px-6 py-3 rounded-lg font-medium transition-colors ${activeTab === 'scheduled'
-                                ? 'bg-white text-gray-800 shadow-sm'
-                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                                }`}
+                            className={`
+                                px-4 py-2.5 
+                                sm:px-6 sm:py-3 
+                                rounded-lg font-medium 
+                                transition-colors 
+                                whitespace-nowrap
+                                text-sm sm:text-base
+                                ${activeTab === 'scheduled'
+                                    ? 'bg-white text-gray-800 shadow-sm'
+                                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                }
+                            `}
                         >
                             Scheduled ({getTabCount('scheduled')})
                         </button>
                         <button
                             onClick={() => setActiveTab('completed')}
-                            className={`px-6 py-3 rounded-lg font-medium transition-colors ${activeTab === 'completed'
-                                ? 'bg-white text-gray-800 shadow-sm'
-                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                                }`}
+                            className={`
+                                px-4 py-2.5 
+                                sm:px-6 sm:py-3 
+                                rounded-lg font-medium 
+                                transition-colors 
+                                whitespace-nowrap
+                                text-sm sm:text-base
+                                ${activeTab === 'completed'
+                                    ? 'bg-white text-gray-800 shadow-sm'
+                                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                }
+                            `}
                         >
                             Completed ({getTabCount('completed')})
                         </button>
                         <button
                             onClick={() => setActiveTab('cancelled')}
-                            className={`px-6 py-3 rounded-lg font-medium transition-colors ${activeTab === 'cancelled'
-                                ? 'bg-white text-gray-800 shadow-sm'
-                                : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
-                                }`}
+                            className={`
+                                px-4 py-2.5 
+                                sm:px-6 sm:py-3 
+                                rounded-lg font-medium 
+                                transition-colors 
+                                whitespace-nowrap
+                                text-sm sm:text-base
+                                ${activeTab === 'cancelled'
+                                    ? 'bg-white text-gray-800 shadow-sm'
+                                    : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
+                                }
+                            `}
                         >
                             Cancelled ({getTabCount('cancelled')})
                         </button>
                     </div>
 
                     {/* Appointments List */}
-                    <div className="space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                         {appointments[activeTab]?.map((appointment) => (
                             <MyAppointmentCard
                                 key={appointment.id}
@@ -143,7 +192,12 @@ const MyAppointments = () => {
                         ))}
 
                         {appointments[activeTab]?.length === 0 && (
-                            <div className="text-center py-12 text-gray-500">
+                            <div className="
+                                text-center 
+                                py-8 sm:py-12 
+                                text-gray-500 
+                                text-sm sm:text-base
+                            ">
                                 No {activeTab} appointments found
                             </div>
                         )}

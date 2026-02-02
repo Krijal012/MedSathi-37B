@@ -14,12 +14,12 @@ const BookAppointment = () => {
 
     // Sample doctors data
     const doctors = [
-        { id: 1, name: 'Dr. Ram Shrestha', specialty: 'Cardiologist' },
-        { id: 2, name: 'Dr. Ram Shrestha', specialty: 'Cardiologist' },
-        { id: 3, name: 'Dr. Ram Shrestha', specialty: 'Cardiologist' },
-        { id: 4, name: 'Dr. Ram Shrestha', specialty: 'Cardiologist' },
-        { id: 5, name: 'Dr. Ram Shrestha', specialty: 'Cardiologist' },
-        { id: 6, name: 'Dr. Ram Shrestha', specialty: 'Cardiologist' },
+        { id: 1, name: 'Dr. Sarah Chen', specialty: 'Cardiologist' },
+        { id: 2, name: 'Dr. Michael Rodriguez', specialty: 'Pediatrician' },
+        { id: 3, name: 'Dr. Emily Park', specialty: 'Dermatologist' },
+        { id: 4, name: 'Dr. James Wilson', specialty: 'Orthopedic Surgeon' },
+        { id: 5, name: 'Dr. Lisa Thompson', specialty: 'Dentist' },
+        { id: 6, name: 'Dr. Robert Kim', specialty: 'Allergist' },
     ];
 
     // Sample time slots
@@ -64,25 +64,45 @@ const BookAppointment = () => {
                 <Header patientName="John Doe" />
 
                 {/* Appointment Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
-                    <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-800">Book Appointment</h1>
-                        <p className="text-gray-500">Schedule a visit with our healthcare professionals</p>
+                    <div className="mb-4 sm:mb-6 lg:mb-8">
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Book Appointment</h1>
+                        <p className="text-gray-500 text-sm sm:text-base">
+                            Schedule a visit with our healthcare professionals
+                        </p>
                     </div>
 
                     {/* Step Indicator */}
-                    <StepIndicator currentStep={currentStep} totalSteps={3} />
+                    <div className="mb-6 sm:mb-8">
+                        <StepIndicator currentStep={currentStep} totalSteps={3} />
+                    </div>
 
                     {/* Form Container */}
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-8 max-w-4xl mx-auto">
+                    <div className="
+                        bg-white rounded-lg shadow-sm border border-gray-100 
+                        p-4 sm:p-6 lg:p-8 
+                        max-w-full sm:max-w-2xl lg:max-w-4xl 
+                        mx-auto
+                        w-full
+                    ">
                         {/* Step 1: Select Doctor */}
                         {currentStep === 1 && (
                             <div>
-                                <h2 className="text-2xl font-bold text-gray-800 mb-2">Select Doctor</h2>
-                                <p className="text-gray-500 mb-6">Choose a healthcare professional for your appointment</p>
+                                <div className="mb-4 sm:mb-6">
+                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Select Doctor</h2>
+                                    <p className="text-gray-500 text-sm sm:text-base">
+                                        Choose a healthcare professional for your appointment
+                                    </p>
+                                </div>
 
-                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                                <div className="
+                                    grid grid-cols-1 
+                                    sm:grid-cols-2 
+                                    lg:grid-cols-3 
+                                    gap-3 sm:gap-4 
+                                    mb-6 sm:mb-8
+                                ">
                                     {doctors.map((doctor) => (
                                         <DoctorCard
                                             key={doctor.id}
@@ -98,7 +118,19 @@ const BookAppointment = () => {
                                     <button
                                         onClick={handleNext}
                                         disabled={!selectedDoctor}
-                                        className="w-full px-8 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                                        className="
+                                            w-full 
+                                            sm:w-auto
+                                            px-4 sm:px-6 lg:px-8 
+                                            py-2.5 sm:py-3 
+                                            bg-teal-500 text-white 
+                                            font-semibold rounded-lg 
+                                            hover:bg-teal-600 
+                                            transition-colors 
+                                            disabled:bg-gray-300 
+                                            disabled:cursor-not-allowed
+                                            text-sm sm:text-base
+                                        "
                                     >
                                         Continue
                                     </button>
@@ -109,28 +141,70 @@ const BookAppointment = () => {
                         {/* Step 2: Select Date & Time */}
                         {currentStep === 2 && (
                             <div>
-                                <h2 className="text-2xl font-bold text-gray-800 mb-2">Select Date & Time</h2>
-                                <p className="text-gray-500 mb-6">Choose your preferred appointment slot</p>
+                                <div className="mb-4 sm:mb-6">
+                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Select Date & Time</h2>
+                                    <p className="text-gray-500 text-sm sm:text-base">
+                                        Choose your preferred appointment slot
+                                    </p>
+                                </div>
 
-                                <div className="mb-8">
+                                <div className="mb-6 sm:mb-8">
                                     {/* Date Selection */}
-                                    <div className="mb-6">
-                                        <label className="block text-sm font-semibold text-gray-700 mb-3">Select Date</label>
+                                    <div className="mb-4 sm:mb-6">
+                                        <label className="
+                                            block 
+                                            text-sm 
+                                            font-semibold 
+                                            text-gray-700 
+                                            mb-2 sm:mb-3
+                                        ">
+                                            Select Date
+                                        </label>
                                         <div className="relative">
-                                            <span className="absolute left-3 top-3 text-gray-400 text-xl">📅</span>
+                                            <span className="
+                                                absolute 
+                                                left-3 top-1/2 
+                                                -translate-y-1/2
+                                                text-gray-400 
+                                                text-lg sm:text-xl
+                                            ">
+                                                📅
+                                            </span>
                                             <input
                                                 type="date"
                                                 value={selectedDate}
                                                 onChange={(e) => setSelectedDate(e.target.value)}
-                                                className="w-full pl-12 pr-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-400 focus:outline-none"
+                                                className="
+                                                    w-full 
+                                                    pl-10 sm:pl-12 pr-4 
+                                                    py-2.5 sm:py-3 
+                                                    border-2 border-gray-300 
+                                                    rounded-lg 
+                                                    focus:border-blue-400 
+                                                    focus:outline-none
+                                                    text-sm sm:text-base
+                                                "
                                             />
                                         </div>
                                     </div>
 
                                     {/* Time Selection */}
                                     <div>
-                                        <label className="block text-sm font-semibold text-gray-700 mb-3">Select Time</label>
-                                        <div className="grid grid-cols-3 gap-2">
+                                        <label className="
+                                            block 
+                                            text-sm 
+                                            font-semibold 
+                                            text-gray-700 
+                                            mb-2 sm:mb-3
+                                        ">
+                                            Select Time
+                                        </label>
+                                        <div className="
+                                            grid grid-cols-2 
+                                            sm:grid-cols-3 
+                                            lg:grid-cols-4 
+                                            gap-2
+                                        ">
                                             {timeSlots.map((time) => (
                                                 <TimeSlot
                                                     key={time}
@@ -143,17 +217,42 @@ const BookAppointment = () => {
                                     </div>
                                 </div>
 
-                                <div className="flex gap-4">
+                                <div className="
+                                    flex flex-col-reverse 
+                                    sm:flex-row 
+                                    gap-3 sm:gap-4
+                                ">
                                     <button
                                         onClick={handleBack}
-                                        className="flex-1 px-8 py-3 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-300 hover:bg-gray-50 transition-colors"
+                                        className="
+                                            flex-1 
+                                            px-4 sm:px-6 lg:px-8 
+                                            py-2.5 sm:py-3 
+                                            bg-white text-gray-700 
+                                            font-semibold rounded-lg 
+                                            border-2 border-gray-300 
+                                            hover:bg-gray-50 
+                                            transition-colors
+                                            text-sm sm:text-base
+                                        "
                                     >
                                         Back
                                     </button>
                                     <button
                                         onClick={handleNext}
                                         disabled={!selectedDate || !selectedTime}
-                                        className="flex-1 px-8 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+                                        className="
+                                            flex-1 
+                                            px-4 sm:px-6 lg:px-8 
+                                            py-2.5 sm:py-3 
+                                            bg-teal-500 text-white 
+                                            font-semibold rounded-lg 
+                                            hover:bg-teal-600 
+                                            transition-colors 
+                                            disabled:bg-gray-300 
+                                            disabled:cursor-not-allowed
+                                            text-sm sm:text-base
+                                        "
                                     >
                                         Continue
                                     </button>
@@ -164,58 +263,149 @@ const BookAppointment = () => {
                         {/* Step 3: Appointment Details */}
                         {currentStep === 3 && (
                             <div>
-                                <h2 className="text-2xl font-bold text-gray-800 mb-2">Appointment Details</h2>
-                                <p className="text-gray-500 mb-6">Provide additional information for your visit</p>
+                                <div className="mb-4 sm:mb-6">
+                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Appointment Details</h2>
+                                    <p className="text-gray-500 text-sm sm:text-base">
+                                        Provide additional information for your visit
+                                    </p>
+                                </div>
 
                                 {/* Reason for Visit */}
-                                <div className="mb-6">
-                                    <label className="block text-sm font-semibold text-gray-700 mb-2">Reason for visit</label>
+                                <div className="mb-4 sm:mb-6">
+                                    <label className="
+                                        block 
+                                        text-sm 
+                                        font-semibold 
+                                        text-gray-700 
+                                        mb-2
+                                    ">
+                                        Reason for visit
+                                    </label>
                                     <textarea
                                         value={reason}
                                         onChange={(e) => setReason(e.target.value)}
                                         placeholder="Describe your symptoms or reason for the appointment"
-                                        rows="5"
-                                        className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:border-blue-400 focus:outline-none resize-none"
+                                        rows="4"
+                                        className="
+                                            w-full 
+                                            px-4 py-3 
+                                            border-2 border-gray-300 
+                                            rounded-lg 
+                                            focus:border-blue-400 
+                                            focus:outline-none 
+                                            resize-none
+                                            text-sm sm:text-base
+                                        "
                                     />
                                 </div>
 
                                 {/* Appointment Summary */}
-                                <div className="bg-gray-50 rounded-lg p-6 mb-8">
-                                    <h3 className="text-xl font-bold text-gray-800 mb-4">Appointment Summary</h3>
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Doctor:</span>
-                                            <span className="font-semibold text-gray-800">{selectedDoctor?.name}</span>
-                                        </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Date:</span>
-                                            <span className="font-semibold text-gray-800">
-                                                {selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', {
-                                                    year: 'numeric',
-                                                    month: 'long',
-                                                    day: 'numeric'
-                                                }) : ''}
+                                <div className="
+                                    bg-gray-50 rounded-lg 
+                                    p-4 sm:p-6 
+                                    mb-6 sm:mb-8
+                                ">
+                                    <h3 className="
+                                        text-lg sm:text-xl 
+                                        font-bold text-gray-800 
+                                        mb-3 sm:mb-4
+                                    ">
+                                        Appointment Summary
+                                    </h3>
+                                    <div className="space-y-2 sm:space-y-3">
+                                        <div className="
+                                            flex flex-col 
+                                            sm:flex-row 
+                                            sm:justify-between 
+                                            gap-1
+                                        ">
+                                            <span className="text-gray-600 text-sm sm:text-base">
+                                                Doctor:
+                                            </span>
+                                            <span className="
+                                                font-semibold 
+                                                text-gray-800 
+                                                text-sm sm:text-base
+                                            ">
+                                                {selectedDoctor?.name || 'Not selected'}
                                             </span>
                                         </div>
-                                        <div className="flex justify-between">
-                                            <span className="text-gray-600">Time:</span>
-                                            <span className="font-semibold text-gray-800">{selectedTime}</span>
+                                        <div className="
+                                            flex flex-col 
+                                            sm:flex-row 
+                                            sm:justify-between 
+                                            gap-1
+                                        ">
+                                            <span className="text-gray-600 text-sm sm:text-base">
+                                                Date:
+                                            </span>
+                                            <span className="
+                                                font-semibold 
+                                                text-gray-800 
+                                                text-sm sm:text-base
+                                            ">
+                                                {selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString('en-US', {
+                                                    year: 'numeric',
+                                                    month: 'short',
+                                                    day: 'numeric'
+                                                }) : 'Not selected'}
+                                            </span>
+                                        </div>
+                                        <div className="
+                                            flex flex-col 
+                                            sm:flex-row 
+                                            sm:justify-between 
+                                            gap-1
+                                        ">
+                                            <span className="text-gray-600 text-sm sm:text-base">
+                                                Time:
+                                            </span>
+                                            <span className="
+                                                font-semibold 
+                                                text-gray-800 
+                                                text-sm sm:text-base
+                                            ">
+                                                {selectedTime || 'Not selected'}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div className="flex gap-4">
+                                <div className="
+                                    flex flex-col-reverse 
+                                    sm:flex-row 
+                                    gap-3 sm:gap-4
+                                ">
                                     <button
                                         onClick={handleBack}
-                                        className="flex-1 px-8 py-3 bg-white text-gray-700 font-semibold rounded-lg border-2 border-gray-300 hover:bg-gray-50 transition-colors"
+                                        className="
+                                            flex-1 
+                                            px-4 sm:px-6 lg:px-8 
+                                            py-2.5 sm:py-3 
+                                            bg-white text-gray-700 
+                                            font-semibold rounded-lg 
+                                            border-2 border-gray-300 
+                                            hover:bg-gray-50 
+                                            transition-colors
+                                            text-sm sm:text-base
+                                        "
                                     >
                                         Back
                                     </button>
                                     <button
                                         onClick={handleSubmit}
-                                        className="flex-1 px-8 py-3 bg-teal-500 text-white font-semibold rounded-lg hover:bg-teal-600 transition-colors"
+                                        className="
+                                            flex-1 
+                                            px-4 sm:px-6 lg:px-8 
+                                            py-2.5 sm:py-3 
+                                            bg-teal-500 text-white 
+                                            font-semibold rounded-lg 
+                                            hover:bg-teal-600 
+                                            transition-colors
+                                            text-sm sm:text-base
+                                        "
                                     >
-                                        Continue
+                                        Confirm Appointment
                                     </button>
                                 </div>
                             </div>

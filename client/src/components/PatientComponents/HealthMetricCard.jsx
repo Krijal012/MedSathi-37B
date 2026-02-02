@@ -8,15 +8,47 @@ const HealthMetricCard = ({ label, value, status, icon }) => {
     };
 
     return (
-        <div className="bg-gray-50 rounded-lg p-4 flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-                <div className="text-2xl">{icon}</div>
-                <div>
-                    <p className="text-sm text-gray-500">{label}</p>
-                    <p className="font-semibold text-gray-800">{value}</p>
+        <div className="
+            bg-gray-50 rounded-lg p-3 
+            sm:p-4 
+            flex items-center justify-between
+            w-full
+        ">
+            <div className="flex items-center space-x-2 sm:space-x-3 min-w-0 flex-1">
+                <div className="
+                    text-xl 
+                    sm:text-2xl 
+                    flex-shrink-0
+                ">
+                    {icon}
+                </div>
+                <div className="min-w-0 flex-1">
+                    <p className="
+                        text-xs 
+                        sm:text-sm 
+                        text-gray-500 
+                        truncate
+                    ">
+                        {label}
+                    </p>
+                    <p className="
+                        font-semibold text-gray-800 
+                        text-base 
+                        sm:text-lg
+                        truncate
+                    ">
+                        {value}
+                    </p>
                 </div>
             </div>
-            <span className={`font-medium ${getStatusColor(status)}`}>
+            <span className={`
+                font-medium 
+                text-xs 
+                sm:text-sm 
+                ${getStatusColor(status)}
+                whitespace-nowrap 
+                ml-2
+            `}>
                 {status}
             </span>
         </div>
