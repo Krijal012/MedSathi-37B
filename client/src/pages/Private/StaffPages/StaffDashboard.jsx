@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import StaffSidebar from '../../components/StaffComponents/StaffSideBar';
-import StaffHeader from '../../components/StaffComponents/StaffHeader';
-import StaffStatCard from '../../components/StaffComponents/StaffStatCard';
-import StaffQueueCard from '../../components/StaffComponents/StaffQueueCard';
+import StaffSidebar from '../../../components/StaffComponents/StaffSideBar';
+import StaffHeader from '../../../components/StaffComponents/StaffHeader';
+import StaffStatCard from '../../../components/StaffComponents/StaffStatCard';
+import StaffQueueCard from '../../../components/StaffComponents/StaffQueueCard';
 
 const StaffDashboard = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);

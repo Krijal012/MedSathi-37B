@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import StaffSidebar from '../../components/StaffComponents/StaffSideBar';
-import StaffHeader from '../../components/StaffComponents/StaffHeader';
-import PatientQueueItem from '../../components/StaffComponents/PatientQueueItem';
+import StaffSidebar from '../../../components/StaffComponents/StaffSideBar';
+import StaffHeader from '../../../components/StaffComponents/StaffHeader';
+import PatientQueueItem from '../../../components/StaffComponents/PatientQueueItem';
 
 const PatientQueue = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
