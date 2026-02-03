@@ -18,6 +18,9 @@ const DoctorAvailability = lazy(() => import("../pages/Private/DoctorAvailabilit
 const DoctorSchedules = lazy(() => import("../pages/Private/DoctorSchedules"));
 const PatientQueue = lazy(() => import("../pages/Private/PatientQueue"));
 const PatientRecords = lazy(() => import("../pages/Private/PatientRecords"));
+const AddMedicine = lazy(() => import("../pages/Private/AddMedicine"));
+const SearchMedicine = lazy(() => import("../pages/Private/SearchMedicine"));
+const PharmacyBilling = lazy(() => import("../pages/Private/PharmacyBilling"));
 
 const PublicRoutes = () => {
     return (
@@ -47,6 +50,9 @@ const PublicRoutes = () => {
                     <Route path="/doctor-schedule" element={<DoctorSchedules />} />
                     <Route path="/patient-records" element={<PatientRecords />} />
                     <Route path="/patient-queue" element={<PatientQueue />} />
+                    <Route path="/add-medicine" element={<AddMedicine />} />
+                    <Route path="/search-medicine" element={<SearchMedicine />} />
+                    <Route path="/pharmacy-billing" element={<PharmacyBilling />} />
                 </Route>
 
                 {/* fallback */}

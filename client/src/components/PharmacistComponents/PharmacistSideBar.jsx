@@ -1,44 +1,38 @@
-import React from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import logo from '../../assets/logo.jpg';
 
 const PharmacistSidebar = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-
     const menuItems = [
         { name: 'Dashboard', path: '/pharmacist-dashboard', icon: '🏠' },
         { name: 'Add Medicine', path: '/add-medicine', icon: '💊' },
         { name: 'Search Medicine', path: '/search-medicine', icon: '🔍' },
-        { name: 'Billing', path: '/billing', icon: '📄' },
+        { name: 'Billing', path: '/pharmacy-billing', icon: '📄' },
     ];
-
-    const isActive = (path) => location.pathname === path;
 
     return (
         <div className="w-64 bg-gray-800 min-h-screen text-white flex flex-col">
             {/* Logo */}
-            <div className="p-6 flex items-center space-x-3 border-b border-gray-700">
+            <Link to="/pharmacist-dashboard" className="p-6 flex items-center space-x-3 border-b border-gray-700 hover:bg-gray-700 transition-colors">
                 <div className="w-10 h-10 rounded-lg overflow-hidden">
                     <img src={logo} alt="MedSathi Logo" className="w-full h-full object-cover" />
                 </div>
                 <span className="text-xl font-bold">MedSathi</span>
-            </div>
+            </Link>
 
             {/* Menu Items */}
             <nav className="flex-1 p-4 space-y-2">
                 {menuItems.map((item) => (
-                    <button
+                    <NavLink
                         key={item.path}
-                        onClick={() => navigate(item.path)}
-                        className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors cursor-pointer ${isActive(item.path)
+                        to={item.path}
+                        className={({ isActive }) => `w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive
                             ? 'bg-blue-600 text-white'
                             : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                             }`}
                     >
                         <span className="text-xl">{item.icon}</span>
                         <span className="font-medium">{item.name}</span>
-                    </button>
+                    </NavLink>
                 ))}
             </nav>
 
