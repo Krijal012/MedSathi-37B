@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sidebar } from '../../components/PatientComponents/Sidebar';
-import Header from '../../components/PatientComponents/Header';
-import DoctorAvailabilityCard from '../../components/PatientComponents/DoctorAvailabilityCard';
+import { Sidebar } from '../../../components/PatientComponents/Sidebar';
+import Header from '../../../components/PatientComponents/Header';
+import DoctorAvailabilityCard from '../../../components/PatientComponents/DoctorAvailabilityCard';
 
 const DoctorAvailability = () => {
     const navigate = useNavigate();

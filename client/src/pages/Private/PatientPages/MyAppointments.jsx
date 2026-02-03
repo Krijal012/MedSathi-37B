@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Sidebar } from '../../components/PatientComponents/Sidebar';
-import Header from '../../components/PatientComponents/Header';
-import MyAppointmentCard from '../../components/PatientComponents/MyAppointmentCard';
+import { Sidebar } from '../../../components/PatientComponents/Sidebar';
+import Header from '../../../components/PatientComponents/Header';
+import MyAppointmentCard from '../../../components/PatientComponents/MyAppointmentCard';
 
 const MyAppointments = () => {
     const [activeTab, setActiveTab] = useState('scheduled');

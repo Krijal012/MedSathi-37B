@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Sidebar } from '../../components/PatientComponents/Sidebar';
-import Header from '../../components/PatientComponents/Header';
-import StepIndicator from '../../components/PatientComponents/StepIndicator';
-import DoctorCard from '../../components/PatientComponents/DoctorCard';
-import TimeSlot from '../../components/PatientComponents/TimeSlot';
+import { Sidebar } from '../../../components/PatientComponents/Sidebar';
+import Header from '../../../components/PatientComponents/Header';
+import StepIndicator from '../../../components/PatientComponents/StepIndicator';
+import DoctorCard from '../../../components/PatientComponents/DoctorCard';
+import TimeSlot from '../../../components/PatientComponents/TimeSlot';
 
 const BookAppointment = () => {
     const [currentStep, setCurrentStep] = useState(1);

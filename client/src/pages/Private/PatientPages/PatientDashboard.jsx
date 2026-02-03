@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sidebar } from '../../components/PatientComponents/Sidebar';
-import Header from '../../components/PatientComponents/Header';
-import StatCard from '../../components/PatientComponents/StatCard';
-import AppointmentCard from '../../components/PatientComponents/AppointmentCard';
-import HealthMetricCard from '../../components/PatientComponents/HealthMetricCard';
+import { Sidebar } from '../../../components/PatientComponents/Sidebar';
+import Header from '../../../components/PatientComponents/Header';
+import StatCard from '../../../components/PatientComponents/StatCard';
+import AppointmentCard from '../../../components/PatientComponents/AppointmentCard';
+import HealthMetricCard from '../../../components/PatientComponents/HealthMetricCard';
 
 const PatientDashboard = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);

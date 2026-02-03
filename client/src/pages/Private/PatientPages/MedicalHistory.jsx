@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Sidebar } from '../../components/PatientComponents/Sidebar';
-import Header from '../../components/PatientComponents/Header';
-import StatCard from '../../components/PatientComponents/StatCard';
-import MedicalRecordCard from '../../components/PatientComponents/MedicalRecordCard';
+import { Sidebar } from '../../../components/PatientComponents/Sidebar';
+import Header from '../../../components/PatientComponents/Header';
+import StatCard from '../../../components/PatientComponents/StatCard';
+import MedicalRecordCard from '../../../components/PatientComponents/MedicalRecordCard';
 
 const MedicalHistory = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
