@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import PharmacistSidebar from '../../components/PharmacistComponents/PharmacistSidebar';
 import PharmacistHeader from '../../components/PharmacistComponents/PharmacistHeader';
 
@@ -11,6 +11,9 @@ const AddMedicine = () => {
         price: 0,
         expiryDate: '',
     });
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -38,23 +41,23 @@ const AddMedicine = () => {
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Sidebar */}
-            <PharmacistSidebar />
+            <PharmacistSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col lg:ml-64">
                 {/* Header */}
-                <PharmacistHeader doctorName="Dr. Smith" />
+                <PharmacistHeader pharmacistName="Dr. Smith" toggleSidebar={toggleSidebar} />
 
                 {/* Page Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
                     <div className="mb-8">
-                        <h1 className="text-3xl font-bold text-gray-800">Add Medicine</h1>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Add Medicine</h1>
                         <p className="text-gray-500">Add new medicine to inventory</p>
                     </div>
 
                     {/* Form Container */}
-                    <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-100 p-8">
+                    <div className="max-w-3xl mx-auto bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6 lg:p-8">
                         <div className="flex items-center space-x-2 mb-6">
                             <span className="text-2xl">✏️</span>
                             <h2 className="text-2xl font-bold text-gray-800">Medicine Details</h2>

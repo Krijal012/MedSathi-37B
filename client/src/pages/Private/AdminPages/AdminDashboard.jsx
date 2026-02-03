@@ -68,10 +68,10 @@ const AdminDashboard = () => {
                 <AdminHeader adminName="Admin User" toggleSidebar={toggleSidebar} />
 
                 {/* Dashboard Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
                     <div className="mb-6">
-                        <h1 className="text-3xl font-bold text-gray-800">Admin Dashboard</h1>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Admin Dashboard</h1>
                         <p className="text-gray-500">Manage your hospital operations</p>
                     </div>
 
@@ -89,8 +89,8 @@ const AdminDashboard = () => {
                     </div>
 
                     {/* Recent Activity Section */}
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
-                        <h2 className="text-2xl font-bold text-gray-800 mb-6">Recent Activity</h2>
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6">
+                        <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Recent Activity</h2>
                         <div className="space-y-3">
                             {recentActivities.map((activity) => (
                                 <ActivityItem

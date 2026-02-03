@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PharmacistSidebar from '../../components/PharmacistComponents/PharmacistSidebar';
 import PharmacistHeader from '../../components/PharmacistComponents/PharmacistHeader';
 import PharmacistStatCard from '../../components/PharmacistComponents/PharmacistStatcard';
 import PharmacistStockCard from '../../components/PharmacistComponents/PharmacistStockCard';
 
 const PharmacistDashboard = () => {
+    const [isSidebarOpen, setSidebarOpen] = useState(false);
+
+    const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+
     // Sample data
     const stats = [
         { title: 'Total Medicines', value: '2025', icon: '🔧', iconColor: 'text-gray-600' },
@@ -43,18 +47,18 @@ const PharmacistDashboard = () => {
     return (
         <div className="flex min-h-screen bg-gray-100">
             {/* Sidebar */}
-            <PharmacistSidebar />
+            <PharmacistSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
             {/* Main Content */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col lg:ml-64">
                 {/* Header */}
-                <PharmacistHeader pharmacistName="Pharmacist" />
+                <PharmacistHeader pharmacistName="Pharmacist" toggleSidebar={toggleSidebar} />
 
                 {/* Dashboard Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
                     <div className="mb-6">
-                        <h1 className="text-3xl font-bold text-gray-800">Doctor Dashboard</h1>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Pharmacist Dashboard</h1>
                         <p className="text-gray-500">Manage medicines, inventory, and billing</p>
                     </div>
 
@@ -72,7 +76,7 @@ const PharmacistDashboard = () => {
                     </div>
 
                     {/* Low Stock Items Section */}
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-6">
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6">
                         <div className="flex items-center space-x-2 mb-6">
                             <span className="text-red-500 text-2xl">⚠️</span>
                             <h2 className="text-2xl font-bold text-gray-800">Low Stock Items</h2>

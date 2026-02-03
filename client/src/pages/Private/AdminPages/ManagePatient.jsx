@@ -67,10 +67,10 @@ const ManagePatients = () => {
                 <AdminHeader adminName="Admin User" toggleSidebar={toggleSidebar} />
 
                 {/* Page Content */}
-                <main className="flex-1 p-8">
+                <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
                     <div className="mb-6">
-                        <h1 className="text-3xl font-bold text-gray-800">Manage Patients</h1>
+                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Manage Patients</h1>
                         <p className="text-gray-500">View and manage patient records</p>
                     </div>
 
@@ -83,13 +83,13 @@ const ManagePatients = () => {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Search Patients..."
-                                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
                             />
                         </div>
                     </div>
 
                     {/* Patients Table */}
-                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
+                    <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-x-auto">
                         <table className="w-full">
                             <thead className="bg-gray-50 border-b border-gray-200">
                                 <tr>
