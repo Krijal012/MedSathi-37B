@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import PharmacistSidebar from '../../components/PharmacistComponents/PharmacistSidebar';
-import PharmacistHeader from '../../components/PharmacistComponents/PharmacistHeader';
+import PharmacistSidebar from '../../../components/PharmacistComponents/PharmacistSidebar';
+import PharmacistHeader from '../../../components/PharmacistComponents/PharmacistHeader';
 
 const SearchMedicine = () => {
     const [searchQuery, setSearchQuery] = useState('');

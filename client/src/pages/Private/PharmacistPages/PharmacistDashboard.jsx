@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import PharmacistSidebar from '../../components/PharmacistComponents/PharmacistSidebar';
-import PharmacistHeader from '../../components/PharmacistComponents/PharmacistHeader';
-import PharmacistStatCard from '../../components/PharmacistComponents/PharmacistStatcard';
-import PharmacistStockCard from '../../components/PharmacistComponents/PharmacistStockCard';
+import PharmacistSidebar from '../../../components/PharmacistComponents/PharmacistSidebar';
+import PharmacistHeader from '../../../components/PharmacistComponents/PharmacistHeader';
+import PharmacistStatCard from '../../../components/PharmacistComponents/PharmacistStatcard';
+import PharmacistStockCard from '../../../components/PharmacistComponents/PharmacistStockCard';
 
 const PharmacistDashboard = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
