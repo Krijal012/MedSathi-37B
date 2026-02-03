@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import StaffSidebar from '../../../components/StaffComponents/StaffSideBar';
 import StaffHeader from '../../../components/StaffComponents/StaffHeader';
-import DoctorScheduleCard from '../../components/StaffComponents/PharmacistScheduleCard';
+import DoctorScheduleCard from '../../../components/StaffComponents/DoctorScheduleCard';
 
 const DoctorSchedules = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
