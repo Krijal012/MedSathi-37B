@@ -1,40 +1,92 @@
+// Controller/authController.js
 import { User } from "../Model/userModel.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../security/jwt-utils.js";
+
+// Email validation regex
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 // Register
 export const register = async (req, res) => {
     try {
         const { fullName, email, password, registerAs } = req.body;
 
-        if (!email || !password || !fullName || !registerAs)
-            return res.status(400).json({ message: "All fields are required" });
+        // Validation
+        if (!email || !password || !fullName || !registerAs) {
+            return res.status(400).json({ 
+                success: false,
+                message: "All fields are required" 
+            });
+        }
 
-        if (!email.includes("@") || !email.includes("."))
-            return res.status(400).json({ message: "Invalid email format" });
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ 
+                success: false,
+                message: "Invalid email format" 
+            });
+        }
 
-        if (password.length < 6)
-            return res.status(400).json({ message: "Password must be at least 6 characters" });
+        if (password.length < 6) {
+            return res.status(400).json({ 
+                success: false,
+                message: "Password must be at least 6 characters" 
+            });
+        }
 
+        // Validate role
+        const validRoles = ['patient', 'doctor', 'admin'];
+        if (!validRoles.includes(registerAs.toLowerCase())) {
+            return res.status(400).json({ 
+                success: false,
+                message: "Invalid role. Must be patient, doctor, or admin" 
+            });
+        }
+
+        // Check if user exists
         const existing = await User.findOne({ where: { email } });
-        if (existing)
-            return res.status(409).json({ message: "User already exists" });
+        if (existing) {
+            return res.status(409).json({ 
+                success: false,
+                message: "User already exists with this email" 
+            });
+        }
 
-        const hashedPassword = await bcrypt.hash(password, 10);
+        // Hash password
+        const hashedPassword = await bcrypt.hash(password, 12);
 
+        // Create user
         const user = await User.create({
             name: fullName,
-            email,
+            email: email.toLowerCase(),
             password: hashedPassword,
-            role: registerAs
+            role: registerAs.toLowerCase()
+        });
+
+        // Generate token
+        const token = generateToken({
+            id: user.id,
+            email: user.email,
+            role: user.role
         });
 
         res.status(201).json({
+            success: true,
             message: "User registered successfully",
-            user: { id: user.id, email: user.email, name: user.name, role: user.role },
+            token,
+            user: { 
+                id: user.id, 
+                email: user.email, 
+                name: user.name, 
+                role: user.role 
+            }
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Registration error:", error);
+        res.status(500).json({ 
+            success: false,
+            message: "Registration failed",
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
 };
 
@@ -43,17 +95,40 @@ export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
 
-        if (!email || !password)
-            return res.status(400).json({ message: "Email and password required" });
+        // Validation
+        if (!email || !password) {
+            return res.status(400).json({ 
+                success: false,
+                message: "Email and password are required" 
+            });
+        }
 
-        const user = await User.findOne({ where: { email } });
-        if (!user)
-            return res.status(404).json({ message: "User not found" });
+        if (!emailRegex.test(email)) {
+            return res.status(400).json({ 
+                success: false,
+                message: "Invalid email format" 
+            });
+        }
 
+        // Find user
+        const user = await User.findOne({ where: { email: email.toLowerCase() } });
+        if (!user) {
+            return res.status(401).json({ 
+                success: false,
+                message: "Invalid email or password" 
+            });
+        }
+
+        // Verify password
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch)
-            return res.status(401).json({ message: "Incorrect password" });
+        if (!isMatch) {
+            return res.status(401).json({ 
+                success: false,
+                message: "Invalid email or password" 
+            });
+        }
 
+        // Generate token
         const token = generateToken({
             id: user.id,
             email: user.email,
@@ -61,6 +136,7 @@ export const login = async (req, res) => {
         });
 
         res.status(200).json({
+            success: true,
             message: "Login successful",
             token,
             user: {
@@ -71,6 +147,39 @@ export const login = async (req, res) => {
             }
         });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        console.error("Login error:", error);
+        res.status(500).json({ 
+            success: false,
+            message: "Login failed",
+            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+        });
     }
+};
+
+// Get current user (protected route)
+export const getMe = async (req, res) => {
+    try {
+        const user = await User.findByPk(req.user.id, {
+            attributes: { exclude: ['password'] }
+        });
+
+        res.status(200).json({
+            success: true,
+            user
+        });
+    } catch (error) {
+        res.status(500).json({ 
+            success: false,
+            message: "Failed to fetch user data",
+            error: error.message 
+        });
+    }
+};
+
+// Logout (client-side token removal, but this can log the action)
+export const logout = async (req, res) => {
+    res.status(200).json({
+        success: true,
+        message: "Logged out successfully"
+    });
 };
