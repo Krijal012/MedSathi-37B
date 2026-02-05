@@ -31,6 +31,18 @@ export const getPharmacistById = async (req, res) => {
     }
 };
 
+// Get pharmacist by Email
+export const getPharmacistByEmail = async (req, res) => {
+    try {
+        const { email } = req.params;
+        const pharmacist = await Pharmacist.findOne({ where: { email: email.toLowerCase() } });
+        if (!pharmacist) return res.status(404).json({ success: false, message: "Pharmacist not found" });
+        res.status(200).json({ success: true, data: pharmacist });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
 // Update pharmacist
 export const updatePharmacist = async (req, res) => {
     try {
