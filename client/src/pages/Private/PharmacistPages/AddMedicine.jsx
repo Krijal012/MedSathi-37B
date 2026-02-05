@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import PharmacistSidebar from '../../../components/PharmacistComponents/PharmacistSidebar';
 import PharmacistHeader from '../../../components/PharmacistComponents/PharmacistHeader';
 
 const AddMedicine = () => {
     const [formData, setFormData] = useState({
-        medicineName: '',
+        name: '',
         category: '',
         manufacturer: '',
-        stockQuantity: 0,
+        stock: 0,
         price: 0,
         expiryDate: '',
     });
@@ -23,19 +24,24 @@ const AddMedicine = () => {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Medicine Data:', formData);
-        alert('Medicine added successfully!');
-        // Reset form
-        setFormData({
-            medicineName: '',
-            category: '',
-            manufacturer: '',
-            stockQuantity: 0,
-            price: 0,
-            expiryDate: '',
-        });
+        try {
+            await axios.post('http://localhost:5000/api/medicine', formData);
+            alert('Medicine added successfully!');
+            // Reset form
+            setFormData({
+                name: '',
+                category: '',
+                manufacturer: '',
+                stock: 0,
+                price: 0,
+                expiryDate: '',
+            });
+        } catch (error) {
+            console.error("Error adding medicine:", error);
+            alert('Failed to add medicine. Check console for details.');
+        }
     };
 
     return (
@@ -46,7 +52,7 @@ const AddMedicine = () => {
             {/* Main Content */}
             <div className="flex-1 flex flex-col lg:ml-64">
                 {/* Header */}
-                <PharmacistHeader pharmacistName="Dr. Smith" toggleSidebar={toggleSidebar} />
+                <PharmacistHeader pharmacistName="Pharmacist" toggleSidebar={toggleSidebar} />
 
                 {/* Page Content */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
@@ -72,8 +78,8 @@ const AddMedicine = () => {
                                     </label>
                                     <input
                                         type="text"
-                                        name="medicineName"
-                                        value={formData.medicineName}
+                                        name="name"
+                                        value={formData.name}
                                         onChange={handleChange}
                                         placeholder="Enter medicine name"
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
@@ -125,8 +131,8 @@ const AddMedicine = () => {
                                     </label>
                                     <input
                                         type="number"
-                                        name="stockQuantity"
-                                        value={formData.stockQuantity}
+                                        name="stock"
+                                        value={formData.stock}
                                         onChange={handleChange}
                                         placeholder="0"
                                         className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"

@@ -1,4 +1,5 @@
 import { Patient } from "../model/patientModel.js";
+import { Op } from "sequelize";
 
 // Create a new patient
 export const createPatient = async (req, res) => {
@@ -50,6 +51,21 @@ export const deletePatient = async (req, res) => {
         if (!patient) return res.status(404).json({ success: false, message: "Patient not found" });
         await patient.destroy();
         res.status(200).json({ success: true, message: "Patient deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Search patients by name
+export const searchPatients = async (req, res) => {
+    const { query } = req.query;
+    try {
+        const patients = await Patient.findAll({
+            where: {
+                name: { [Op.iLike]: `%${query}%` }
+            }
+        });
+        res.status(200).json({ success: true, data: patients });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }

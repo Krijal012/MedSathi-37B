@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import PharmacistSidebar from '../../../components/PharmacistComponents/PharmacistSidebar';
 import PharmacistHeader from '../../../components/PharmacistComponents/PharmacistHeader';
 
@@ -8,57 +9,27 @@ const SearchMedicine = () => {
 
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
-    // Sample medicine data
-    const medicines = [
-        {
-            id: 1,
-            name: 'Amoxicillin 500mg',
-            category: 'Antibiotics',
-            stock: 150,
-            price: 'Rs 1200',
-            manufacturer: 'MedLife',
-        },
-        {
-            id: 2,
-            name: 'Amoxicillin 500mg',
-            category: 'Antibiotics',
-            stock: 150,
-            price: 'Rs 1200',
-            manufacturer: 'MedLife',
-        },
-        {
-            id: 3,
-            name: 'Amoxicillin 500mg',
-            category: 'Antibiotics',
-            stock: 150,
-            price: 'Rs 1200',
-            manufacturer: 'MedLife',
-        },
-        {
-            id: 4,
-            name: 'Amoxicillin 500mg',
-            category: 'Antibiotics',
-            stock: 150,
-            price: 'Rs 1200',
-            manufacturer: 'MedLife',
-        },
-        {
-            id: 5,
-            name: 'Amoxicillin 500mg',
-            category: 'Antibiotics',
-            stock: 150,
-            price: 'Rs 1200',
-            manufacturer: 'MedLife',
-        },
-        {
-            id: 6,
-            name: 'Amoxicillin 500mg',
-            category: 'Antibiotics',
-            stock: 150,
-            price: 'Rs 1200',
-            manufacturer: 'MedLife',
-        },
-    ];
+    const [medicines, setMedicines] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    React.useEffect(() => {
+        const fetchMedicines = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/api/medicine');
+                setMedicines(response.data.data || []);
+            } catch (error) {
+                console.error("Error fetching medicines:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchMedicines();
+    }, []);
+
+    const filteredMedicines = medicines.filter(med =>
+        med.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        med.category.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -68,7 +39,7 @@ const SearchMedicine = () => {
             {/* Main Content */}
             <div className="flex-1 flex flex-col lg:ml-64">
                 {/* Header */}
-                <PharmacistHeader pharmacistName="Dr. Smith" toggleSidebar={toggleSidebar} />
+                <PharmacistHeader pharmacistName="Pharmacist" toggleSidebar={toggleSidebar} />
 
                 {/* Page Content */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
@@ -87,7 +58,7 @@ const SearchMedicine = () => {
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 placeholder="Search by name or category..."
-                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-400"
                             />
                         </div>
                     </div>
@@ -115,22 +86,35 @@ const SearchMedicine = () => {
                                 </tr>
                             </thead>
                             <tbody>
-                                {medicines.map((medicine, index) => (
-                                    <tr
-                                        key={medicine.id}
-                                        className={`${
-                                            index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                                        } hover:bg-blue-50 transition-colors`}
-                                    >
-                                        <td className="px-6 py-4 text-gray-800 font-medium">
-                                            {medicine.name}
+                                {loading ? (
+                                    <tr>
+                                        <td colSpan="5" className="px-6 py-8 text-center text-gray-500 italic">
+                                            Loading inventory...
                                         </td>
-                                        <td className="px-6 py-4 text-gray-600">{medicine.category}</td>
-                                        <td className="px-6 py-4 text-gray-600">{medicine.stock}</td>
-                                        <td className="px-6 py-4 text-gray-600">{medicine.price}</td>
-                                        <td className="px-6 py-4 text-gray-600">{medicine.manufacturer}</td>
                                     </tr>
-                                ))}
+                                ) : filteredMedicines.length > 0 ? (
+                                    filteredMedicines.map((medicine, index) => (
+                                        <tr
+                                            key={medicine.id}
+                                            className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                                                } hover:bg-teal-50 transition-colors`}
+                                        >
+                                            <td className="px-6 py-4 text-gray-800 font-medium">
+                                                {medicine.name}
+                                            </td>
+                                            <td className="px-6 py-4 text-gray-600">{medicine.category}</td>
+                                            <td className="px-6 py-4 text-gray-600">{medicine.stock}</td>
+                                            <td className="px-6 py-4 text-gray-600">Rs {medicine.price}</td>
+                                            <td className="px-6 py-4 text-gray-600">{medicine.manufacturer}</td>
+                                        </tr>
+                                    ))
+                                ) : (
+                                    <tr>
+                                        <td colSpan="5" className="px-6 py-8 text-center text-gray-500 italic">
+                                            No medicines found matching your search.
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>

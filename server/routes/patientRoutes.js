@@ -4,10 +4,13 @@ import {
     getAllPatients,
     getPatientById,
     updatePatient,
-    deletePatient
+    deletePatient,
+    searchPatients
 } from "../controller/patientController.js";
 
 const router = express.Router();
+
+router.get("/search", searchPatients);
 
 router.post("/", createPatient);
 router.get("/", getAllPatients);

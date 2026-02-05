@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const MedicalRecordCard = ({ title, date, doctorName }) => {
+const MedicalRecordCard = ({ title, date, doctorName, diagnosis, treatment, notes }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -29,7 +29,7 @@ const MedicalRecordCard = ({ title, date, doctorName }) => {
                             sm:text-lg 
                             mb-1
                         ">
-                            {title}
+                            {title || diagnosis}
                         </h4>
                         <div className="
                             flex flex-col 
@@ -46,7 +46,7 @@ const MedicalRecordCard = ({ title, date, doctorName }) => {
                             </span>
                             <span className="hidden sm:inline">•</span>
                             <span className="flex items-center">
-                                Dr. {doctorName}
+                                {doctorName}
                             </span>
                         </div>
                     </div>
@@ -83,21 +83,23 @@ const MedicalRecordCard = ({ title, date, doctorName }) => {
                         <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
                             <span className="text-gray-600 w-24">Diagnosis:</span>
                             <span className="font-medium text-gray-800 text-right sm:text-left">
-                                Regular Checkup
+                                {diagnosis}
                             </span>
                         </div>
                         <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
-                            <span className="text-gray-600 w-24">Prescription:</span>
+                            <span className="text-gray-600 w-24">Treatment:</span>
                             <span className="font-medium text-gray-800 text-right sm:text-left">
-                                Medication A, B
+                                {treatment}
                             </span>
                         </div>
-                        <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
-                            <span className="text-gray-600 w-24">Notes:</span>
-                            <span className="font-medium text-gray-800 text-right sm:text-left">
-                                All vitals normal
-                            </span>
-                        </div>
+                        {notes && (
+                            <div className="flex flex-col sm:flex-row sm:justify-between gap-2">
+                                <span className="text-gray-600 w-24">Notes:</span>
+                                <span className="font-medium text-gray-800 text-right sm:text-left">
+                                    {notes}
+                                </span>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}

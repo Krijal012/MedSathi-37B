@@ -9,6 +9,7 @@ import { staffRouter } from "./routes/staffRoutes.js";
 import { pharmacistRouter } from "./routes/pharmacistRoutes.js";
 import { appointmentRouter } from "./routes/appointmentRoutes.js";
 import { historyRouter } from "./routes/historyRoutes.js";
+import { medicineRouter } from "./routes/medicineRoutes.js";
 
 // Load environment variables FIRST
 dotenv.config();
@@ -53,6 +54,7 @@ app.use("/api/staff", staffRouter);
 app.use("/api/pharmacists", pharmacistRouter);
 app.use("/api/appointments", appointmentRouter);
 app.use("/api/history", historyRouter);
+app.use("/api/medicine", medicineRouter);
 
 // 404 handler - Must be AFTER all routes
 app.use((req, res) => {

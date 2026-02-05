@@ -1,25 +1,64 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import PharmacistSidebar from '../../../components/PharmacistComponents/PharmacistSidebar';
 import PharmacistHeader from '../../../components/PharmacistComponents/PharmacistHeader';
 
 const PharmacyBilling = () => {
     const [patientName, setPatientName] = useState('');
+    const [patients, setPatients] = useState([]);
+    const [selectedPatient, setSelectedPatient] = useState(null);
+    const [medicines, setMedicines] = useState([]);
     const [billItems, setBillItems] = useState([
         {
-            id: 1,
-            medicine: 'Amoxicillin 500mg',
-            quantity: 2,
-            price: 1200,
-            total: 2400,
+            id: Date.now(),
+            medicine: '',
+            quantity: 1,
+            price: 0,
+            total: 0,
         },
     ]);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [user, setUser] = useState(null);
+    const [medicineOptions, setMedicineOptions] = useState([]);
 
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        setUser(storedUser);
+
+        // Fetch all medicines for dropdown
+        const fetchMeds = async () => {
+            try {
+                const res = await axios.get('http://localhost:5000/api/medicine');
+                setMedicineOptions(res.data.data || []);
+            } catch (err) {
+                console.error("Error fetching medicines:", err);
+            }
+        };
+        fetchMeds();
+    }, []);
+
+    // Search patients as the user types
+    useEffect(() => {
+        if (patientName.length > 1 && !selectedPatient) {
+            const delayDebounceFn = setTimeout(async () => {
+                try {
+                    const res = await axios.get(`http://localhost:5000/api/patients/search?query=${patientName}`);
+                    setPatients(res.data.data || []);
+                } catch (err) {
+                    console.error("Error searching patients:", err);
+                }
+            }, 300);
+            return () => clearTimeout(delayDebounceFn);
+        } else {
+            setPatients([]);
+        }
+    }, [patientName, selectedPatient]);
+
     const handleAddItem = () => {
         const newItem = {
-            id: billItems.length + 1,
+            id: Date.now(),
             medicine: '',
             quantity: 1,
             price: 0,
@@ -36,11 +75,18 @@ const PharmacyBilling = () => {
     const handleItemChange = (id, field, value) => {
         const updatedItems = billItems.map((item) => {
             if (item.id === id) {
-                const updatedItem = { ...item, [field]: value };
-                // Calculate total if quantity or price changes
-                if (field === 'quantity' || field === 'price') {
-                    updatedItem.total = updatedItem.quantity * updatedItem.price;
+                let updatedItem = { ...item, [field]: value };
+
+                // If medicine is selected, auto-fill price
+                if (field === 'medicine') {
+                    const selectedMed = medicineOptions.find(m => m.name === value);
+                    if (selectedMed) {
+                        updatedItem.price = selectedMed.price;
+                    }
                 }
+
+                // Calculate total
+                updatedItem.total = (updatedItem.quantity || 0) * (updatedItem.price || 0);
                 return updatedItem;
             }
             return item;
@@ -50,15 +96,30 @@ const PharmacyBilling = () => {
 
     const calculateGrandTotal = () => {
         return billItems.reduce((sum, item) => sum + item.total, 0);
-    };    
+    };
 
-    const handleGenerateBill = () => {
-        console.log('Bill Details:', {
-            patientName,
-            items: billItems,
-            total: calculateGrandTotal(),
-        });
-        alert('Bill generated successfully!');
+    const handleGenerateBill = async () => {
+        if (!patientName) return alert("Select a patient first");
+        if (billItems.some(i => !i.medicine)) return alert("Select medicines for all items");
+
+        const billData = {
+            patientName: patientName,
+            date: new Date().toISOString().split('T')[0],
+            diagnosis: "Pharmacy Purchase",
+            treatment: billItems.map(i => `${i.medicine} (Qty: ${i.quantity})`).join(', '),
+            doctorName: user?.name || "Pharmacist"
+        };
+
+        try {
+            await axios.post('http://localhost:5000/api/history', billData);
+            alert('Bill generated and recorded in patient history!');
+            setPatientName('');
+            setSelectedPatient(null);
+            setBillItems([{ id: Date.now(), medicine: '', quantity: 1, price: 0, total: 0 }]);
+        } catch (error) {
+            console.error("Error generating bill:", error);
+            alert('Failed to record bill.');
+        }
     };
 
     return (
@@ -69,7 +130,7 @@ const PharmacyBilling = () => {
             {/* Main Content */}
             <div className="flex-1 flex flex-col lg:ml-64">
                 {/* Header */}
-                <PharmacistHeader pharmacistName="Dr. Smith" toggleSidebar={toggleSidebar} />
+                <PharmacistHeader pharmacistName={user?.name || "Pharmacist"} toggleSidebar={toggleSidebar} />
 
                 {/* Page Content */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
@@ -86,18 +147,38 @@ const PharmacyBilling = () => {
                             <h2 className="text-2xl font-bold text-gray-800">New Bill</h2>
                         </div>
 
-                        {/* Patient Name */}
-                        <div className="mb-6">
+                        {/* Patient Name with Search Dropdown */}
+                        <div className="mb-6 relative">
                             <label className="block text-sm font-semibold text-gray-700 mb-2">
                                 Patient Name
                             </label>
                             <input
                                 type="text"
                                 value={patientName}
-                                onChange={(e) => setPatientName(e.target.value)}
-                                placeholder="Enter patient name"
-                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                                onChange={(e) => {
+                                    setPatientName(e.target.value);
+                                    setSelectedPatient(null);
+                                }}
+                                placeholder="Search patient..."
+                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-400"
                             />
+                            {patients.length > 0 && !selectedPatient && (
+                                <div className="absolute z-10 w-full bg-white border border-gray-200 mt-1 rounded-lg shadow-lg">
+                                    {patients.map(p => (
+                                        <div
+                                            key={p.id}
+                                            className="px-4 py-2 hover:bg-teal-50 cursor-pointer"
+                                            onClick={() => {
+                                                setPatientName(p.name);
+                                                setSelectedPatient(p);
+                                                setPatients([]);
+                                            }}
+                                        >
+                                            {p.name} ({p.email})
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
                         {/* Bill Items */}
@@ -114,15 +195,18 @@ const PharmacyBilling = () => {
                                 <div key={item.id} className="grid grid-cols-1 md:grid-cols-12 gap-y-2 gap-x-4 mb-3 border-b md:border-none pb-3 md:pb-0 items-center">
                                     <div className="md:col-span-5">
                                         <label className="md:hidden text-xs font-semibold text-gray-600">Medicine</label>
-                                        <input
-                                            type="text"
+                                        <select
                                             value={item.medicine}
                                             onChange={(e) =>
                                                 handleItemChange(item.id, 'medicine', e.target.value)
                                             }
-                                            placeholder="Amoxicillin 500mg"
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
-                                        />
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-400"
+                                        >
+                                            <option value="">Select Medicine</option>
+                                            {medicineOptions.map(m => (
+                                                <option key={m.id} value={m.name}>{m.name} ({m.stock} left)</option>
+                                            ))}
+                                        </select>
                                     </div>
                                     <div className="md:col-span-2">
                                         <label className="md:hidden text-xs font-semibold text-gray-600">Quantity</label>
@@ -132,7 +216,7 @@ const PharmacyBilling = () => {
                                             onChange={(e) =>
                                                 handleItemChange(item.id, 'quantity', parseInt(e.target.value) || 0)
                                             }
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 text-center"
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-teal-400 text-center"
                                         />
                                     </div>
                                     <div className="md:col-span-2">
@@ -140,10 +224,8 @@ const PharmacyBilling = () => {
                                         <input
                                             type="number"
                                             value={item.price}
-                                            onChange={(e) =>
-                                                handleItemChange(item.id, 'price', parseFloat(e.target.value) || 0)
-                                            }
-                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400 text-right"
+                                            readOnly
+                                            className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50 text-right"
                                         />
                                     </div>
                                     <div className="md:col-span-2">
