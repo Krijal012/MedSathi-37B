@@ -38,3 +38,31 @@ export const searchMedicines = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+
+// Update a medicine
+export const updateMedicine = async (req, res) => {
+    try {
+        const medicine = await Medicine.findByPk(req.params.id);
+        if (!medicine) {
+            return res.status(404).json({ success: false, message: "Medicine not found" });
+        }
+        await medicine.update(req.body);
+        res.status(200).json({ success: true, data: medicine });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};
+
+// Delete a medicine
+export const deleteMedicine = async (req, res) => {
+    try {
+        const medicine = await Medicine.findByPk(req.params.id);
+        if (!medicine) {
+            return res.status(404).json({ success: false, message: "Medicine not found" });
+        }
+        await medicine.destroy();
+        res.status(200).json({ success: true, message: "Medicine deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};

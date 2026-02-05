@@ -49,11 +49,11 @@ const BookAppointment = () => {
     }, [user]);
 
     const timeSlots = [
-        '09:00AM', '09:30AM', '10:00AM',
-        '10:30AM', '11:00AM', '11:30AM',
-        '12:00PM', '12:30PM', '13:00PM',
-        '13:30PM', '14:00PM', '14:30PM',
-        '15:00PM', '15:30PM', '16:00PM',
+        '09:00 AM', '09:30 AM', '10:00 AM',
+        '10:30 AM', '11:00 AM', '11:30 AM',
+        '12:00 PM', '12:30 PM', '01:00 PM',
+        '01:30 PM', '02:00 PM', '02:30 PM',
+        '03:00 PM', '03:30 PM', '04:00 PM',
     ];
 
     // Helper to check if a time is within a range (e.g., "9:00AM" within "9AM - 5PM")
@@ -61,17 +61,27 @@ const BookAppointment = () => {
         if (!scheduleStr || scheduleStr === 'Off') return false;
 
         const parseTime = (t) => {
-            const match = t.match(/(\d+)(?::(\d+))?\s*(AM|PM)/i);
+            if (!t) return null;
+            // Handle both "9AM", "09:00AM", "13:00" formats
+            const match = t.match(/(\d+)(?::(\d+))?\s*(AM|PM)?/i);
             if (!match) return null;
+
             let [_, hours, mins, period] = match;
             hours = parseInt(hours);
             mins = mins ? parseInt(mins) : 0;
-            if (period.toUpperCase() === 'PM' && hours !== 12) hours += 12;
-            if (period.toUpperCase() === 'AM' && hours === 12) hours = 0;
+            period = period ? period.toUpperCase() : null;
+
+            if (period === 'PM' && hours !== 12) hours += 12;
+            if (period === 'AM' && hours === 12) hours = 0;
+
+            // If no period but hours > 12, it's 24h format
+            // If hours <= 12 and no period, we can't be sure, but let's assume AM or 24h
+
             return hours * 60 + mins;
         };
 
-        const range = scheduleStr.split('-').map(s => s.trim());
+        // Support various dash types: -, –, — (hyphen, en-dash, em-dash)
+        const range = scheduleStr.split(/[-–—]/).map(s => s.trim());
         if (range.length !== 2) return true; // Default to true if format is weird but not "Off"
 
         const target = parseTime(timeStr);
@@ -85,7 +95,9 @@ const BookAppointment = () => {
     const getAvailableSlots = () => {
         if (!selectedDate || !selectedPharmacist) return [];
 
-        const dateObj = new Date(selectedDate);
+        // Use split to avoid timezone issues with Date constructor
+        const [year, month, day] = selectedDate.split('-').map(Number);
+        const dateObj = new Date(year, month - 1, day);
         const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const dayName = dayNames[dateObj.getDay()];
 
@@ -295,7 +307,11 @@ const BookAppointment = () => {
                                             lg:grid-cols-4 
                                             gap-2
                                         ">
-                                            {availableSlots.length > 0 ? (
+                                            {!selectedDate ? (
+                                                <p className="text-gray-500 font-medium col-span-full py-4 text-center bg-gray-50 rounded-xl">
+                                                    Please select a date above to see available time slots.
+                                                </p>
+                                            ) : availableSlots.length > 0 ? (
                                                 availableSlots.map((time) => (
                                                     <TimeSlot
                                                         key={time}
@@ -305,9 +321,21 @@ const BookAppointment = () => {
                                                     />
                                                 ))
                                             ) : (
-                                                <p className="text-red-500 font-medium col-span-full py-4 text-center bg-red-50 rounded-xl">
-                                                    No available slots for this day. The professional is currently off or outside working hours.
-                                                </p>
+                                                <div className="col-span-full">
+                                                    <p className="text-red-500 font-medium py-4 text-center bg-red-50 rounded-xl">
+                                                        No available slots for this day. The professional is currently off or outside working hours.
+                                                    </p>
+                                                    {/* Diagnostic Info for Debugging */}
+                                                    <div className="mt-2 text-[10px] text-gray-400 text-center">
+                                                        Selected: {(() => {
+                                                            const [y, m, d] = selectedDate.split('-').map(Number);
+                                                            const dObj = new Date(y, m - 1, d);
+                                                            const dNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+                                                            const dName = dNames[dObj.getDay()];
+                                                            return `${dName} (${selectedPharmacist?.schedule?.[dName] || 'No Schedule Found'})`;
+                                                        })()}
+                                                    </div>
+                                                </div>
                                             )}
                                         </div>
                                     </div>
