@@ -10,7 +10,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
         { name: 'Book Appointment', path: '/book-appointment', icon: '📅' },
         { name: 'My Appointments', path: '/my-appointments', icon: '📋' },
         { name: 'Medical History', path: '/medical-history', icon: '📄' },
-        { name: 'Doctor Availability', path: '/doctor-availability', icon: '👨‍⚕️' },
+        { name: 'Pharmacist Availability', path: '/doctor-availability', icon: '👨‍🔬' },
     ];
 
     const isActive = (path) => location.pathname === path;
@@ -72,8 +72,8 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
                             to={item.path}
                             onClick={toggleSidebar} // Close sidebar on mobile nav click
                             className={({ isActive }) => `w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-colors ${isActive
-                                    ? 'bg-blue-600 text-white'
-                                    : 'text-gray-300 hover:bg-gray-700 hover:text-white'
+                                ? 'bg-blue-600 text-white'
+                                : 'text-gray-300 hover:bg-gray-700 hover:text-white'
                                 }
                             `}
                         >

@@ -1,27 +1,34 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/db.js";
 
-export const User = sequelize.define("User", {
+export const Appointment = sequelize.define("Appointment", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    patientName: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    password: {
+    doctorName: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    role: {
+    date: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
+    },
+    time: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    reason: {
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
+    status: {
+        type: DataTypes.STRING,
+        defaultValue: 'pending'
     }
 });

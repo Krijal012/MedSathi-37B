@@ -4,25 +4,46 @@ import Header from '../../../components/PatientComponents/Header';
 import StepIndicator from '../../../components/PatientComponents/StepIndicator';
 import DoctorCard from '../../../components/PatientComponents/DoctorCard';
 import TimeSlot from '../../../components/PatientComponents/TimeSlot';
+import AppointmentCard from '../../../components/PatientComponents/AppointmentCard';
+import axios from 'axios';
 
 const BookAppointment = () => {
     const [currentStep, setCurrentStep] = useState(1);
-    const [selectedDoctor, setSelectedDoctor] = useState(null);
+    const [selectedPharmacist, setSelectedPharmacist] = useState(null);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
     const [reason, setReason] = useState('');
+    const [user, setUser] = useState(null);
 
-    // Sample doctors data
-    const doctors = [
-        { id: 1, name: 'Dr. Sarah Chen', specialty: 'Cardiologist' },
-        { id: 2, name: 'Dr. Michael Rodriguez', specialty: 'Pediatrician' },
-        { id: 3, name: 'Dr. Emily Park', specialty: 'Dermatologist' },
-        { id: 4, name: 'Dr. James Wilson', specialty: 'Orthopedic Surgeon' },
-        { id: 5, name: 'Dr. Lisa Thompson', specialty: 'Dentist' },
-        { id: 6, name: 'Dr. Robert Kim', specialty: 'Allergist' },
-    ];
+    React.useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        setUser(storedUser);
+    }, []);
+
+    const [pharmacists, setPharmacists] = useState([]);
+    const [appointments, setAppointments] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    React.useEffect(() => {
+        const fetchData = async () => {
+            if (!user) return;
+            try {
+                const [pharmRes, apptRes] = await Promise.all([
+                    axios.get('http://localhost:5000/api/pharmacists'),
+                    axios.get(`http://localhost:5000/api/appointments/patient/${user.name}`)
+                ]);
+                setPharmacists(pharmRes.data.data || []);
+                setAppointments(apptRes.data.data || []);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, [user]);
 
     // Sample time slots
     const timeSlots = [
@@ -45,14 +66,24 @@ const BookAppointment = () => {
         }
     };
 
-    const handleSubmit = () => {
-        console.log('Appointment Details:', {
-            doctor: selectedDoctor,
+    const handleSubmit = async () => {
+        const appointmentData = {
+            patientName: user?.name || "Anonymous Patient",
+            doctorName: selectedPharmacist?.name, // Keeping the field name for backend compatibility if needed, or mapping it
+            providerType: 'pharmacist',
             date: selectedDate,
             time: selectedTime,
             reason: reason,
-        });
-        alert('Appointment booked successfully!');
+        };
+
+        try {
+            await axios.post('http://localhost:5000/api/appointments', appointmentData);
+            alert('Appointment booked successfully!');
+            window.location.href = '/patient-dashboard';
+        } catch (error) {
+            console.error("Error booking appointment:", error);
+            alert('Failed to book appointment.');
+        }
     };
 
     return (
@@ -60,7 +91,7 @@ const BookAppointment = () => {
             <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
             <div className="flex-1 flex flex-col lg:ml-64">
-                <Header patientName="John Doe" toggleSidebar={toggleSidebar} />
+                <Header patientName={user?.name || "Patient"} toggleSidebar={toggleSidebar} />
 
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
@@ -84,13 +115,13 @@ const BookAppointment = () => {
                         mx-auto
                         w-full
                     ">
-                        {/* Step 1: Select Doctor */}
+                        {/* Step 1: Select Pharmacist */}
                         {currentStep === 1 && (
                             <div>
                                 <div className="mb-4 sm:mb-6">
-                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Select Doctor</h2>
+                                    <h2 className="text-xl sm:text-2xl font-bold text-gray-800">Select Pharmacist</h2>
                                     <p className="text-gray-500 text-sm sm:text-base">
-                                        Choose a healthcare professional for your appointment
+                                        Choose a pharmacist for your consultation
                                     </p>
                                 </div>
 
@@ -101,21 +132,39 @@ const BookAppointment = () => {
                                     gap-3 sm:gap-4 
                                     mb-6 sm:mb-8
                                 ">
-                                    {doctors.map((doctor) => (
-                                        <DoctorCard
-                                            key={doctor.id}
-                                            doctorName={doctor.name}
-                                            specialty={doctor.specialty}
-                                            isSelected={selectedDoctor?.id === doctor.id}
-                                            onClick={() => setSelectedDoctor(doctor)}
-                                        />
-                                    ))}
+                                    {loading ? (
+                                        <p>Loading pharmacists...</p>
+                                    ) : pharmacists.length > 0 ? (
+                                        pharmacists.map((pharm) => (
+                                            <div
+                                                key={pharm.id}
+                                                onClick={() => setSelectedPharmacist(pharm)}
+                                                className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${selectedPharmacist?.id === pharm.id ? 'border-teal-500 bg-teal-50 shadow-md ring-4 ring-teal-50' : 'border-gray-100 hover:border-teal-200 hover:bg-gray-50 shadow-sm'}`}
+                                            >
+                                                <div className="flex items-center gap-3 mb-3">
+                                                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 text-xl font-bold">
+                                                        P
+                                                    </div>
+                                                    <div>
+                                                        <p className="font-bold text-gray-800">{pharm.name}</p>
+                                                        <p className="text-xs text-teal-600 font-medium">Pharmacist</p>
+                                                    </div>
+                                                </div>
+                                                <p className="text-sm text-gray-600 mb-1">License: {pharm.licenseNumber}</p>
+                                                <div className="flex items-center gap-1 text-xs text-gray-500">
+                                                    <span>📍</span> Available Now
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p className="text-gray-500 italic col-span-full">No pharmacists available. Please register pharmacists first.</p>
+                                    )}
                                 </div>
 
                                 <div className="flex justify-end">
                                     <button
                                         onClick={handleNext}
-                                        disabled={!selectedDoctor}
+                                        disabled={!selectedPharmacist}
                                         className="
                                             w-full 
                                             sm:w-auto
@@ -318,14 +367,14 @@ const BookAppointment = () => {
                                             gap-1
                                         ">
                                             <span className="text-gray-600 text-sm sm:text-base">
-                                                Doctor:
+                                                Pharmacist:
                                             </span>
                                             <span className="
                                                 font-semibold 
                                                 text-gray-800 
                                                 text-sm sm:text-base
                                             ">
-                                                {selectedDoctor?.name || 'Not selected'}
+                                                {selectedPharmacist?.name || 'Not selected'}
                                             </span>
                                         </div>
                                         <div className="
@@ -408,6 +457,36 @@ const BookAppointment = () => {
                                 </div>
                             </div>
                         )}
+                    </div>
+
+                    {/* Existing Appointments Section */}
+                    <div className="mt-12 max-w-full sm:max-w-2xl lg:max-w-4xl mx-auto w-full">
+                        <div className="flex items-center justify-between mb-4">
+                            <h2 className="text-xl font-bold text-gray-800">Your Upcoming Appointments</h2>
+                            <span className="bg-teal-100 text-teal-700 text-xs font-bold px-2.5 py-1 rounded-full">
+                                {appointments.length} Active
+                            </span>
+                        </div>
+
+                        <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6">
+                            {loading ? (
+                                <p className="text-gray-500 italic">Checking your schedule...</p>
+                            ) : appointments.length > 0 ? (
+                                <div className="space-y-3">
+                                    {appointments.map((appt, index) => (
+                                        <AppointmentCard
+                                            key={index}
+                                            providerName={appt.doctorName}
+                                            specialty={appt.reason || "Pharmacy Consultation"}
+                                            date={new Date(appt.date).toLocaleDateString()}
+                                            time={appt.time}
+                                        />
+                                    ))}
+                                </div>
+                            ) : (
+                                <p className="text-gray-500 italic text-center py-4">No upcoming appointments found. Book your first one above!</p>
+                            )}
+                        </div>
                     </div>
                 </main>
             </div>

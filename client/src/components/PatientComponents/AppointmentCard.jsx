@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AppointmentCard = ({ doctorName, specialty, date, time }) => {
+const AppointmentCard = ({ providerName, specialty, date, time }) => {
     return (
         <div className="
             bg-gray-50 rounded-lg p-3 
@@ -24,7 +24,7 @@ const AppointmentCard = ({ doctorName, specialty, date, time }) => {
                     border border-gray-200
                     flex-shrink-0
                 ">
-                    🩺
+                    👤
                 </div>
                 <div className="min-w-0 flex-1">
                     <h4 className="
@@ -33,7 +33,7 @@ const AppointmentCard = ({ doctorName, specialty, date, time }) => {
                         sm:text-base 
                         truncate
                     ">
-                        {doctorName}
+                        {providerName}
                     </h4>
                     <p className="text-xs sm:text-sm text-gray-500 truncate">
                         {specialty}

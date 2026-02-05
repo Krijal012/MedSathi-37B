@@ -1,7 +1,7 @@
 import { z } from "zod";
 export const RegisterSchema = z
   .object({
-    registerAs: z.enum(["Patient", "Staff", "Pharmacist"], {
+    registerAs: z.enum(["patient", "staff", "pharmacist"], {
       errorMap: () => ({ message: "Please select a role" }),
     }),
     fullName: z.string().nonempty({ message: "Full Name is required" }),

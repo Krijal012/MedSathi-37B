@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DoctorAvailabilityCard = ({ doctorName, specialty, rating, reviews, experience, nextAvailable, onBookNow }) => {
+const DoctorAvailabilityCard = ({ name, specialty, rating, reviews, experience, nextAvailable, onBookNow }) => {
     return (
         <div className="
             bg-white rounded-lg p-4 
@@ -21,7 +21,7 @@ const DoctorAvailabilityCard = ({ doctorName, specialty, rating, reviews, experi
                     sm:text-3xl 
                     flex-shrink-0
                 ">
-                    🩺
+                    💊
                 </div>
                 <div className="min-w-0 flex-1">
                     <h4 className="
@@ -30,10 +30,10 @@ const DoctorAvailabilityCard = ({ doctorName, specialty, rating, reviews, experi
                         sm:text-lg 
                         truncate
                     ">
-                        {doctorName}
+                        {name}
                     </h4>
                     <p className="text-xs sm:text-sm text-gray-500 mb-2">
-                        {specialty}
+                        {specialty || 'Pharmacist'}
                     </p>
                     <div className="
                         flex flex-wrap 
@@ -52,7 +52,7 @@ const DoctorAvailabilityCard = ({ doctorName, specialty, rating, reviews, experi
                             sm:bg-transparent 
                             sm:px-0 sm:py-0
                         ">
-                            ⭐ {rating} <span className="hidden sm:inline">({reviews})</span>
+                            ⭐ {rating || '4.5'} <span className="hidden sm:inline">({reviews || '0'})</span>
                         </span>
                         <span className="
                             text-gray-600 
@@ -62,7 +62,7 @@ const DoctorAvailabilityCard = ({ doctorName, specialty, rating, reviews, experi
                             sm:bg-transparent 
                             sm:px-0 sm:py-0
                         ">
-                            {experience} yrs
+                            {experience || '5'}+ yrs
                         </span>
                     </div>
                 </div>
@@ -80,14 +80,14 @@ const DoctorAvailabilityCard = ({ doctorName, specialty, rating, reviews, experi
             ">
                 <div className="sm:mb-3">
                     <p className="text-xs text-gray-500 hidden sm:block">
-                        Next available
+                        Status
                     </p>
                     <p className="
-                        font-semibold text-gray-800 
+                        font-semibold text-teal-600 
                         text-sm 
                         sm:text-base
                     ">
-                        {nextAvailable}
+                        Available Now
                     </p>
                 </div>
                 <button
@@ -105,7 +105,7 @@ const DoctorAvailabilityCard = ({ doctorName, specialty, rating, reviews, experi
                         whitespace-nowrap
                     "
                 >
-                    Book Now
+                    Consult Now
                 </button>
             </div>
         </div>

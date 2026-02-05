@@ -2,8 +2,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import { connection } from "./Database/db.js";
+import { connection } from "./database/db.js";
 import { router } from "./routes/userRoutes.js";
+import { patientRouter } from "./routes/patientRoutes.js";
+import { staffRouter } from "./routes/staffRoutes.js";
+import { pharmacistRouter } from "./routes/pharmacistRoutes.js";
+import { appointmentRouter } from "./routes/appointmentRoutes.js";
+import { historyRouter } from "./routes/historyRoutes.js";
 
 // Load environment variables FIRST
 dotenv.config();
@@ -12,7 +17,7 @@ const app = express();
 
 // CORS configuration
 app.use(cors({
-    origin: [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:3000"].filter(Boolean),
+    origin: [process.env.FRONTEND_URL, "http://localhost:5173", "http://localhost:5174", "http://localhost:3000"].filter(Boolean),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     allowedHeaders: ['Content-Type', 'Authorization']
@@ -43,6 +48,11 @@ app.get("/health", (req, res) => {
 
 // API Routes
 app.use("/api/auth", router);
+app.use("/api/patients", patientRouter);
+app.use("/api/staff", staffRouter);
+app.use("/api/pharmacists", pharmacistRouter);
+app.use("/api/appointments", appointmentRouter);
+app.use("/api/history", historyRouter);
 
 // 404 handler - Must be AFTER all routes
 app.use((req, res) => {
@@ -70,7 +80,7 @@ const startServer = async () => {
     try {
         // Connect to database first
         await connection();
-        
+
         // Then start the server
         app.listen(PORT, () => {
             console.log(`✅ Server running on port ${PORT}`);

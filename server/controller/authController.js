@@ -1,5 +1,8 @@
 // Controller/authController.js
-import { User } from "../Model/userModel.js";
+import { User } from "../model/userModel.js";
+import { Staff } from "../model/staffModel.js";
+import { Pharmacist } from "../model/pharmacistModel.js";
+import { Patient } from "../model/patientModel.js";
 import bcrypt from "bcryptjs";
 import { generateToken } from "../security/jwt-utils.js";
 
@@ -13,41 +16,42 @@ export const register = async (req, res) => {
 
         // Validation
         if (!email || !password || !fullName || !registerAs) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 success: false,
-                message: "All fields are required" 
+                message: "All fields are required"
             });
         }
 
         if (!emailRegex.test(email)) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 success: false,
-                message: "Invalid email format" 
+                message: "Invalid email format"
             });
         }
 
         if (password.length < 6) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 success: false,
-                message: "Password must be at least 6 characters" 
+                message: "Password must be at least 6 characters"
             });
         }
 
         // Validate role
-        const validRoles = ['patient', 'doctor', 'admin'];
-        if (!validRoles.includes(registerAs.toLowerCase())) {
-            return res.status(400).json({ 
+        const validRoles = ['patient', 'staff', 'pharmacist', 'admin'];
+        const role = registerAs.toLowerCase();
+        if (!validRoles.includes(role)) {
+            return res.status(400).json({
                 success: false,
-                message: "Invalid role. Must be patient, doctor, or admin" 
+                message: "Invalid role. Must be patient, staff, pharmacist, or admin"
             });
         }
 
         // Check if user exists
         const existing = await User.findOne({ where: { email } });
         if (existing) {
-            return res.status(409).json({ 
+            return res.status(409).json({
                 success: false,
-                message: "User already exists with this email" 
+                message: "User already exists with this email"
             });
         }
 
@@ -59,8 +63,31 @@ export const register = async (req, res) => {
             name: fullName,
             email: email.toLowerCase(),
             password: hashedPassword,
-            role: registerAs.toLowerCase()
+            role: role
         });
+
+        // Create role-specific record
+        if (role === 'staff') {
+            await Staff.create({
+                name: fullName,
+                email: email.toLowerCase(),
+                department: 'General', // Default for now
+                designation: 'Staff'
+            });
+        } else if (role === 'pharmacist') {
+            await Pharmacist.create({
+                name: fullName,
+                email: email.toLowerCase(),
+                licenseNumber: 'TEMP-' + Date.now() // Temporary license if not provided
+            });
+        } else if (role === 'patient') {
+            await Patient.create({
+                name: fullName,
+                email: email.toLowerCase(),
+                age: 0,
+                gender: 'Not Specified'
+            });
+        }
 
         // Generate token
         const token = generateToken({
@@ -73,16 +100,16 @@ export const register = async (req, res) => {
             success: true,
             message: "User registered successfully",
             token,
-            user: { 
-                id: user.id, 
-                email: user.email, 
-                name: user.name, 
-                role: user.role 
+            user: {
+                id: user.id,
+                email: user.email,
+                name: user.name,
+                role: user.role
             }
         });
     } catch (error) {
         console.error("Registration error:", error);
-        res.status(500).json({ 
+        res.status(500).json({
             success: false,
             message: "Registration failed",
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -97,34 +124,34 @@ export const login = async (req, res) => {
 
         // Validation
         if (!email || !password) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 success: false,
-                message: "Email and password are required" 
+                message: "Email and password are required"
             });
         }
 
         if (!emailRegex.test(email)) {
-            return res.status(400).json({ 
+            return res.status(400).json({
                 success: false,
-                message: "Invalid email format" 
+                message: "Invalid email format"
             });
         }
 
         // Find user
         const user = await User.findOne({ where: { email: email.toLowerCase() } });
         if (!user) {
-            return res.status(401).json({ 
+            return res.status(401).json({
                 success: false,
-                message: "Invalid email or password" 
+                message: "Invalid email or password"
             });
         }
 
         // Verify password
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-            return res.status(401).json({ 
+            return res.status(401).json({
                 success: false,
-                message: "Invalid email or password" 
+                message: "Invalid email or password"
             });
         }
 
@@ -148,7 +175,7 @@ export const login = async (req, res) => {
         });
     } catch (error) {
         console.error("Login error:", error);
-        res.status(500).json({ 
+        res.status(500).json({
             success: false,
             message: "Login failed",
             error: process.env.NODE_ENV === 'development' ? error.message : undefined
@@ -168,10 +195,10 @@ export const getMe = async (req, res) => {
             user
         });
     } catch (error) {
-        res.status(500).json({ 
+        res.status(500).json({
             success: false,
             message: "Failed to fetch user data",
-            error: error.message 
+            error: error.message
         });
     }
 };

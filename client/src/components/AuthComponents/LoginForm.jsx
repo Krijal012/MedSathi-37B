@@ -63,11 +63,11 @@ export function LoginForm() {
 
             // Navigate to dashboard based on user role
             const userRole = response.data.user.role;
-            if (userRole === 'Staff' || userRole === 'Admin') {
+            if (userRole === 'staff' || userRole === 'admin' || userRole === 'doctor') {
                 navigate('/staff-dashboard');
-            } else if (userRole === 'Pharmacist') {
+            } else if (userRole === 'pharmacist') {
                 navigate('/pharmacist-dashboard');
-            } else if (userRole === 'Patient') {
+            } else if (userRole === 'patient') {
                 navigate('/patient-dashboard');
             } else {
                 navigate('/patient-dashboard'); // Default fallback
@@ -77,8 +77,9 @@ export function LoginForm() {
                 setErrors({ email: error.response.data.message });
                 toast.error(error.response.data.message || 'Login failed');
             } else {
-                setErrors({ email: "An error occurred. Please try again." });
-                toast.error('An error occurred. Please try again.');
+                console.error("Login Error:", error);
+                setErrors({ email: "Unable to connect to server." });
+                toast.error('Network error: Check server connection or CORS.');
             }
         }
     };

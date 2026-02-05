@@ -2,68 +2,68 @@ import React, { useState } from 'react';
 import { Sidebar } from '../../../components/PatientComponents/Sidebar';
 import Header from '../../../components/PatientComponents/Header';
 import MyAppointmentCard from '../../../components/PatientComponents/MyAppointmentCard';
+import axios from 'axios';
 
 const MyAppointments = () => {
     const [activeTab, setActiveTab] = useState('scheduled');
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
+    const [appointments, setAppointments] = useState({ scheduled: [], completed: [], cancelled: [] });
+    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
+    const [searchQuery, setSearchQuery] = useState('');
 
-    // Sample appointments data
-    const appointments = {
-        scheduled: [
-            {
-                id: 1,
-                doctorName: 'Dr. Ram Shrestha',
-                specialty: 'Cardiologist',
-                date: 'Jan 10, 2026',
-                time: '15:00PM',
-                status: 'Scheduled',
-            },
-            {
-                id: 2,
-                doctorName: 'Dr. Hari Bahadur Shah',
-                specialty: 'Oncologist',
-                date: 'Feb 10, 2026',
-                time: '15:00PM',
-                status: 'Scheduled',
-            },
-            {
-                id: 3,
-                doctorName: 'Dr. Sita Thapa',
-                specialty: 'Neurologist',
-                date: 'Feb 10, 2026',
-                time: '15:00PM',
-                status: 'Scheduled',
-            },
-        ],
-        completed: [
-            {
-                id: 4,
-                doctorName: 'Dr. Sarah Johnson',
-                specialty: 'General Physician',
-                date: 'Dec 15, 2024',
-                time: '10:00AM',
-                status: 'Completed',
-            },
-        ],
-        cancelled: [
-            {
-                id: 5,
-                doctorName: 'Dr. Mike Brown',
-                specialty: 'Dentist',
-                date: 'Dec 20, 2024',
-                time: '14:00PM',
-                status: 'Cancelled',
-            },
-        ],
-    };
+    React.useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        setUser(storedUser);
 
-    const handleCancel = (id) => {
+        const fetchAppointments = async () => {
+            if (!storedUser) return;
+            try {
+                const response = await axios.get(`http://localhost:5000/api/appointments/patient/${storedUser.name}`);
+                const data = response.data.data || [];
+
+                // Categorize appointments
+                const categorized = {
+                    scheduled: data.filter(a => a.status === 'pending' || a.status === 'Scheduled'),
+                    completed: data.filter(a => a.status === 'Completed' || a.status === 'completed'),
+                    cancelled: data.filter(a => a.status === 'Cancelled' || a.status === 'cancelled')
+                };
+                setAppointments(categorized);
+            } catch (error) {
+                console.error("Error fetching appointments:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchAppointments();
+    }, []);
+
+    const handleCancel = async (id) => {
         if (window.confirm('Are you sure you want to cancel this appointment?')) {
-            console.log('Cancelled appointment:', id);
-            alert('Appointment cancelled successfully!');
+            try {
+                await axios.delete(`http://localhost:5000/api/appointments/${id}`);
+                // Refresh data
+                const response = await axios.get(`http://localhost:5000/api/appointments/patient/${user.name}`);
+                const data = response.data.data || [];
+                const categorized = {
+                    scheduled: data.filter(a => a.status === 'pending' || a.status === 'Scheduled'),
+                    completed: data.filter(a => a.status === 'Completed' || a.status === 'completed'),
+                    cancelled: data.filter(a => a.status === 'Cancelled' || a.status === 'cancelled')
+                };
+                setAppointments(categorized);
+                alert('Appointment cancelled successfully!');
+            } catch (error) {
+                console.error("Error cancelling appointment:", error);
+                alert('Failed to cancel appointment.');
+            }
         }
     };
+
+    const filteredAppointments = appointments[activeTab]?.filter(appt =>
+        appt.doctorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        (appt.reason && appt.reason.toLowerCase().includes(searchQuery.toLowerCase()))
+    ) || [];
 
     const getTabCount = (tab) => {
         return appointments[tab]?.length || 0;
@@ -74,7 +74,7 @@ const MyAppointments = () => {
             <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
             <div className="flex-1 flex flex-col lg:ml-64">
-                <Header patientName="John Doe" toggleSidebar={toggleSidebar} />
+                <Header patientName={user?.name || "Patient"} toggleSidebar={toggleSidebar} />
 
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">
                     {/* Page Title */}
@@ -98,7 +98,9 @@ const MyAppointments = () => {
                             </span>
                             <input
                                 type="text"
-                                placeholder="Search by doctor or speciality..."
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                placeholder="Search by provider or speciality..."
                                 className="
                                     w-full 
                                     pl-10 pr-4 
@@ -106,7 +108,7 @@ const MyAppointments = () => {
                                     border border-gray-300 
                                     rounded-lg 
                                     focus:outline-none 
-                                    focus:border-blue-400
+                                    focus:border-teal-400
                                     text-sm sm:text-base
                                 "
                             />
@@ -132,7 +134,7 @@ const MyAppointments = () => {
                                 whitespace-nowrap
                                 text-sm sm:text-base
                                 ${activeTab === 'scheduled'
-                                    ? 'bg-white text-gray-800 shadow-sm'
+                                    ? 'bg-white text-gray-800 shadow-sm border border-teal-100'
                                     : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                 }
                             `}
@@ -149,7 +151,7 @@ const MyAppointments = () => {
                                 whitespace-nowrap
                                 text-sm sm:text-base
                                 ${activeTab === 'completed'
-                                    ? 'bg-white text-gray-800 shadow-sm'
+                                    ? 'bg-white text-gray-800 shadow-sm border border-teal-100'
                                     : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                 }
                             `}
@@ -166,7 +168,7 @@ const MyAppointments = () => {
                                 whitespace-nowrap
                                 text-sm sm:text-base
                                 ${activeTab === 'cancelled'
-                                    ? 'bg-white text-gray-800 shadow-sm'
+                                    ? 'bg-white text-gray-800 shadow-sm border border-teal-100'
                                     : 'bg-gray-200 text-gray-600 hover:bg-gray-300'
                                 }
                             `}
@@ -177,19 +179,21 @@ const MyAppointments = () => {
 
                     {/* Appointments List */}
                     <div className="space-y-3 sm:space-y-4">
-                        {appointments[activeTab]?.map((appointment) => (
-                            <MyAppointmentCard
-                                key={appointment.id}
-                                doctorName={appointment.doctorName}
-                                specialty={appointment.specialty}
-                                date={appointment.date}
-                                time={appointment.time}
-                                status={appointment.status}
-                                onCancel={() => handleCancel(appointment.id)}
-                            />
-                        ))}
-
-                        {appointments[activeTab]?.length === 0 && (
+                        {loading ? (
+                            <p className="text-gray-500 italic">Syncing your appointments...</p>
+                        ) : filteredAppointments.length > 0 ? (
+                            filteredAppointments.map((appointment) => (
+                                <MyAppointmentCard
+                                    key={appointment.id}
+                                    providerName={appointment.doctorName}
+                                    specialty={appointment.reason || "Public Health Consultation"}
+                                    date={new Date(appointment.date).toLocaleDateString()}
+                                    time={appointment.time}
+                                    status={appointment.status}
+                                    onCancel={() => handleCancel(appointment.id)}
+                                />
+                            ))
+                        ) : (
                             <div className="
                                 text-center 
                                 py-8 sm:py-12 

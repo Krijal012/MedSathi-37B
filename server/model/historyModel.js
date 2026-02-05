@@ -1,27 +1,30 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/db.js";
 
-export const User = sequelize.define("User", {
+export const MedicalHistory = sequelize.define("MedicalHistory", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true
     },
-    name: {
+    patientName: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    email: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+    date: {
+        type: DataTypes.DATEONLY,
+        allowNull: false
     },
-    password: {
+    diagnosis: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    role: {
-        type: DataTypes.STRING,
+    treatment: {
+        type: DataTypes.TEXT,
         allowNull: false
+    },
+    doctorName: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 });

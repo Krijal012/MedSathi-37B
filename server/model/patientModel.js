@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/db.js";
 
-export const User = sequelize.define("User", {
+export const Patient = sequelize.define("Patient", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -16,12 +16,16 @@ export const User = sequelize.define("User", {
         allowNull: false,
         unique: true
     },
-    password: {
+    age: {
+        type: DataTypes.INTEGER,
+        allowNull: false
+    },
+    gender: {
         type: DataTypes.STRING,
         allowNull: false
     },
-    role: {
+    address: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: true
     }
 });
