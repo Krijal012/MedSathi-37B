@@ -1,6 +1,6 @@
 import React from 'react';
 
-const AppointmentCard = ({ providerName, specialty, date, time }) => {
+const AppointmentCard = ({ id, providerName, specialty, date, time, status, onComplete }) => {
     return (
         <div className="
             bg-gray-50 rounded-lg p-3 
@@ -13,7 +13,7 @@ const AppointmentCard = ({ providerName, specialty, date, time }) => {
             transition-colors
             w-full
         ">
-            <div className="flex items-center space-x-3 mb-3 sm:mb-0">
+            <div className="flex items-center space-x-3 mb-3 sm:mb-0 min-w-0 flex-1">
                 <div className="
                     w-10 h-10 
                     sm:w-12 sm:h-12 
@@ -38,15 +38,23 @@ const AppointmentCard = ({ providerName, specialty, date, time }) => {
                     <p className="text-xs sm:text-sm text-gray-500 truncate">
                         {specialty}
                     </p>
+                    <span className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${status === 'completed' ? 'bg-green-100 text-green-700' :
+                            status === 'cancelled' ? 'bg-red-100 text-red-700' :
+                                'bg-blue-100 text-blue-700'
+                        }`}>
+                        {status || 'pending'}
+                    </span>
                 </div>
             </div>
             <div className="
                 text-left 
                 sm:text-right 
                 flex 
-                sm:block 
+                sm:flex-col
                 justify-between 
                 items-center
+                sm:items-end
+                gap-2
             ">
                 <div>
                     <p className="
@@ -60,6 +68,14 @@ const AppointmentCard = ({ providerName, specialty, date, time }) => {
                         {time}
                     </p>
                 </div>
+                {onComplete && status !== 'completed' && status !== 'cancelled' && (
+                    <button
+                        onClick={() => onComplete(id)}
+                        className="px-3 py-1 bg-teal-600 text-white text-xs font-semibold rounded hover:bg-teal-700 transition-colors"
+                    >
+                        Mark Complete
+                    </button>
+                )}
             </div>
         </div>
     );

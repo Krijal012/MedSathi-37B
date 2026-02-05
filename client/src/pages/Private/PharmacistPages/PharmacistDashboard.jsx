@@ -14,48 +14,60 @@ const PharmacistDashboard = () => {
         { title: 'Total Medicines', value: '0', icon: '🔧', iconColor: 'text-gray-600' },
         { title: 'Low Stock Items', value: '0', icon: '⚠️', iconColor: 'text-red-500' },
         { title: "Today's Appointments", value: '0', icon: '📅', iconColor: 'text-blue-500' },
-        { title: 'New Sales', value: 'Rs 0', icon: '📊', iconColor: 'text-green-500' },
+        { title: 'Pharmacy Status', value: 'Active', icon: '✅', iconColor: 'text-green-500' },
     ]);
     const [lowStockMedicines, setLowStockMedicines] = useState([]);
     const [loading, setLoading] = useState(true);
 
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
+    const fetchDashboardData = async () => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        if (!storedUser) return;
+        try {
+            const [apptRes, medRes] = await Promise.all([
+                axios.get(`http://localhost:5000/api/appointments`),
+                axios.get(`http://localhost:5000/api/medicine`)
+            ]);
+
+            const allAppts = apptRes.data.data || [];
+            const pharmacistAppts = allAppts.filter(a => a.doctorName === storedUser.name);
+            setAppointments(pharmacistAppts);
+
+            const allMeds = medRes.data.data || [];
+            const lowStock = allMeds.filter(m => m.stock < 20);
+            setLowStockMedicines(lowStock);
+
+            setStats([
+                { title: 'Total Medicines', value: allMeds.length.toString(), icon: '🔧', iconColor: 'text-gray-600' },
+                { title: 'Low Stock Items', value: lowStock.length.toString(), icon: '⚠️', iconColor: 'text-red-500' },
+                { title: "Today's Appointments", value: pharmacistAppts.filter(a => a.status !== 'completed').length.toString(), icon: '📅', iconColor: 'text-blue-500' },
+                { title: 'Pharmacy Status', value: 'Active', icon: '✅', iconColor: 'text-green-500' },
+            ]);
+
+        } catch (error) {
+            console.error("Error fetching dashboard data:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
         const storedUser = JSON.parse(localStorage.getItem('user'));
         setUser(storedUser);
-
-        const fetchDashboardData = async () => {
-            if (!storedUser) return;
-            try {
-                const [apptRes, medRes] = await Promise.all([
-                    axios.get(`http://localhost:5000/api/appointments`),
-                    axios.get(`http://localhost:5000/api/medicine`)
-                ]);
-
-                const allAppts = apptRes.data.data || [];
-                const pharmacistAppts = allAppts.filter(a => a.doctorName === storedUser.name);
-                setAppointments(pharmacistAppts);
-
-                const allMeds = medRes.data.data || [];
-                const lowStock = allMeds.filter(m => m.stock < 20);
-                setLowStockMedicines(lowStock);
-
-                setStats([
-                    { title: 'Total Medicines', value: allMeds.length.toString(), icon: '🔧', iconColor: 'text-gray-600' },
-                    { title: 'Low Stock Items', value: lowStock.length.toString(), icon: '⚠️', iconColor: 'text-red-500' },
-                    { title: "Today's Appointments", value: pharmacistAppts.length.toString(), icon: '📅', iconColor: 'text-blue-500' },
-                    { title: 'Pharmacy Status', value: 'Active', icon: '✅', iconColor: 'text-green-500' },
-                ]);
-
-            } catch (error) {
-                console.error("Error fetching dashboard data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
         fetchDashboardData();
     }, []);
+
+    const handleCompleteAppointment = async (id) => {
+        try {
+            await axios.patch(`http://localhost:5000/api/appointments/${id}/status`, { status: 'completed' });
+            alert('Appointment marked as completed!');
+            fetchDashboardData();
+        } catch (error) {
+            console.error("Error updating appointment:", error);
+            alert('Failed to update appointment.');
+        }
+    };
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -102,11 +114,13 @@ const PharmacistDashboard = () => {
                                     appointments.map((appt, index) => (
                                         <AppointmentCard
                                             key={index}
+                                            id={appt.id}
                                             providerName={appt.patientName}
                                             specialty={appt.reason || "Pharmacy Visit"}
                                             date={new Date(appt.date).toLocaleDateString()}
                                             time={appt.time}
                                             status={appt.status}
+                                            onComplete={handleCompleteAppointment}
                                         />
                                     ))
                                 ) : (

@@ -1,15 +1,12 @@
 import { Medicine } from "../model/medicineModel.js";
 import { Op } from "sequelize";
-import fs from "fs";
 
 // Add a new medicine
 export const addMedicine = async (req, res) => {
     try {
-        fs.appendFileSync("debug.log", `[${new Date().toISOString()}] Adding Medicine: ${JSON.stringify(req.body)}\n`);
         const medicine = await Medicine.create(req.body);
         res.status(201).json({ success: true, data: medicine });
     } catch (error) {
-        fs.appendFileSync("debug.log", `[${new Date().toISOString()}] Error: ${error.message}\n`);
         res.status(400).json({ success: false, message: error.message });
     }
 };
