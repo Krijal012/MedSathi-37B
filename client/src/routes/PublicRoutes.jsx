@@ -21,6 +21,7 @@ const PatientRecords = lazy(() => import("../pages/Private/StaffPages/PatientRec
 const AddMedicine = lazy(() => import("../pages/Private/PharmacistPages/AddMedicine"));
 const SearchMedicine = lazy(() => import("../pages/Private/PharmacistPages/SearchMedicine"));
 const PharmacyBilling = lazy(() => import("../pages/Private/PharmacistPages/PharmacyBilling"));
+const PharmacistSchedule = lazy(() => import("../pages/Private/PharmacistPages/PharmacistSchedule"));
 const AdminDashboard = lazy(() => import("../pages/Private/AdminPages/AdminDashboard"));
 const ManagePatients = lazy(() => import("../pages/Private/AdminPages/ManagePatient"));
 const ManageStaffs = lazy(() => import("../pages/Private/AdminPages/ManageStaff"));
@@ -56,6 +57,7 @@ const PublicRoutes = () => {
                     <Route path="/add-medicine" element={<AddMedicine />} />
                     <Route path="/search-medicine" element={<SearchMedicine />} />
                     <Route path="/pharmacy-billing" element={<PharmacyBilling />} />
+                    <Route path="/pharmacist-schedule" element={<PharmacistSchedule />} />
                     <Route path="/admin-dashboard" element={<AdminDashboard />} />
                     <Route path="/manage-patients" element={<ManagePatients />} />
                     <Route path="/manage-staffs" element={<ManageStaffs />} />

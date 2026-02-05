@@ -23,11 +23,13 @@ export const getPharmacistQueue = async (req, res) => {
     }
 };
 
-// Get current general queue (e.g. for dashboard)
+// Get current general queue (e.g. for dashboard and general patient queue)
 export const getCurrentQueue = async (req, res) => {
     try {
         const queue = await Appointment.findAll({
-            where: { status: 'confirmed' } // Or whatever status means "waiting for doctor"
+            where: {
+                status: { [Op.in]: ['pending', 'confirmed'] }
+            }
         });
         res.status(200).json({ success: true, data: queue || [] });
     } catch (error) {

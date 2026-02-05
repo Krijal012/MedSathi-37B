@@ -2,8 +2,18 @@ const seedData = async () => {
     try {
         console.log("Starting seeding...");
 
+        // Helper to log response
+        const checkRes = async (res, name) => {
+            const data = await res.json();
+            if (res.ok) {
+                console.log(`✅ ${name} added successfully`);
+            } else {
+                console.error(`❌ Failed to add ${name}:`, data.message);
+            }
+        };
+
         // Add sample doctors
-        await fetch('http://localhost:5000/api/doctors', {
+        const drRam = await fetch('http://localhost:5000/api/doctors', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -15,8 +25,9 @@ const seedData = async () => {
                 }
             })
         });
+        await checkRes(drRam, "Dr. Ram");
 
-        await fetch('http://localhost:5000/api/doctors', {
+        const drSita = await fetch('http://localhost:5000/api/doctors', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -28,9 +39,10 @@ const seedData = async () => {
                 }
             })
         });
+        await checkRes(drSita, "Dr. Sita");
 
         // Add sample pharmacist
-        await fetch('http://localhost:5000/api/pharmacists', {
+        const pharmBinod = await fetch('http://localhost:5000/api/pharmacists', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -43,19 +55,35 @@ const seedData = async () => {
                 }
             })
         });
+        await checkRes(pharmBinod, "Pharm. Binod");
 
         // Add sample appointment in pharmacist queue
-        await fetch('http://localhost:5000/api/appointments', {
+        const appt1 = await fetch('http://localhost:5000/api/appointments', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                patientName: "John Doe",
+                patientName: "John Smith",
                 doctorName: "Dr. Ram Shrestha",
-                appointmentTime: "10:30 AM",
+                time: "10:30 AM",
                 status: "waiting_for_pharmacist",
                 date: new Date().toISOString().split('T')[0]
             })
         });
+        await checkRes(appt1, "Appointment (Waiting for Pharmacist)");
+
+        const appt2 = await fetch('http://localhost:5000/api/appointments', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                patientName: "Jane Doe",
+                doctorName: "Pharm. Binod Chaudhary",
+                providerType: "pharmacist",
+                time: "11:00 AM",
+                status: "confirmed",
+                date: new Date().toISOString().split('T')[0]
+            })
+        });
+        await checkRes(appt2, "Direct Pharmacist Appointment");
 
         console.log("Seeding complete! Please refresh the page.");
     } catch (error) {

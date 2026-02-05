@@ -48,7 +48,6 @@ const BookAppointment = () => {
         fetchData();
     }, [user]);
 
-    // Sample time slots
     const timeSlots = [
         '09:00AM', '09:30AM', '10:00AM',
         '10:30AM', '11:00AM', '11:30AM',
@@ -56,6 +55,47 @@ const BookAppointment = () => {
         '13:30PM', '14:00PM', '14:30PM',
         '15:00PM', '15:30PM', '16:00PM',
     ];
+
+    // Helper to check if a time is within a range (e.g., "9:00AM" within "9AM - 5PM")
+    const isTimeInSchedule = (timeStr, scheduleStr) => {
+        if (!scheduleStr || scheduleStr === 'Off') return false;
+
+        const parseTime = (t) => {
+            const match = t.match(/(\d+)(?::(\d+))?\s*(AM|PM)/i);
+            if (!match) return null;
+            let [_, hours, mins, period] = match;
+            hours = parseInt(hours);
+            mins = mins ? parseInt(mins) : 0;
+            if (period.toUpperCase() === 'PM' && hours !== 12) hours += 12;
+            if (period.toUpperCase() === 'AM' && hours === 12) hours = 0;
+            return hours * 60 + mins;
+        };
+
+        const range = scheduleStr.split('-').map(s => s.trim());
+        if (range.length !== 2) return true; // Default to true if format is weird but not "Off"
+
+        const target = parseTime(timeStr);
+        const start = parseTime(range[0]);
+        const end = parseTime(range[1]);
+
+        if (target === null || start === null || end === null) return true;
+        return target >= start && target <= end;
+    };
+
+    const getAvailableSlots = () => {
+        if (!selectedDate || !selectedPharmacist) return [];
+
+        const dateObj = new Date(selectedDate);
+        const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const dayName = dayNames[dateObj.getDay()];
+
+        const daySchedule = selectedPharmacist.schedule?.[dayName];
+        if (!daySchedule || daySchedule === 'Off') return [];
+
+        return timeSlots.filter(time => isTimeInSchedule(time, daySchedule));
+    };
+
+    const availableSlots = getAvailableSlots();
 
     const handleNext = () => {
         if (currentStep < 3) {
@@ -255,14 +295,20 @@ const BookAppointment = () => {
                                             lg:grid-cols-4 
                                             gap-2
                                         ">
-                                            {timeSlots.map((time) => (
-                                                <TimeSlot
-                                                    key={time}
-                                                    time={time}
-                                                    isSelected={selectedTime === time}
-                                                    onClick={() => setSelectedTime(time)}
-                                                />
-                                            ))}
+                                            {availableSlots.length > 0 ? (
+                                                availableSlots.map((time) => (
+                                                    <TimeSlot
+                                                        key={time}
+                                                        time={time}
+                                                        isSelected={selectedTime === time}
+                                                        onClick={() => setSelectedTime(time)}
+                                                    />
+                                                ))
+                                            ) : (
+                                                <p className="text-red-500 font-medium col-span-full py-4 text-center bg-red-50 rounded-xl">
+                                                    No available slots for this day. The professional is currently off or outside working hours.
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

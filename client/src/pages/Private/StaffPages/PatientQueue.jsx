@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import StaffSidebar from '../../../components/StaffComponents/StaffSideBar';
 import StaffHeader from '../../../components/StaffComponents/StaffHeader';
 import PatientQueueItem from '../../../components/StaffComponents/PatientQueueItem';
@@ -14,13 +15,13 @@ const PatientQueue = () => {
     useEffect(() => {
         const fetchQueue = async () => {
             try {
-                const response = await fetch('http://localhost:5000/api/queue/pharmacist');
+                const response = await fetch('http://localhost:5000/api/queue/current');
                 const data = await response.json();
                 if (data.success) {
                     setQueueList(data.data);
                 }
             } catch (error) {
-                console.error("Error fetching pharmacist queue:", error);
+                console.error("Error fetching patient queue:", error);
             } finally {
                 setLoading(false);
             }
@@ -37,13 +38,17 @@ const PatientQueue = () => {
             });
             const data = await response.json();
             if (data.success) {
-                setQueueList(queueList.map(item => item.id === id ? { ...item, status: newStatus } : item));
                 if (newStatus === 'complete' || newStatus === 'completed') {
-                    alert('Patient marked as complete!');
+                    setQueueList(queueList.filter(item => item.id !== id));
+                    toast.success('Patient appointment marked as complete!');
+                } else {
+                    setQueueList(queueList.map(item => item.id === id ? { ...item, status: newStatus } : item));
+                    toast.success(`Status updated to ${newStatus}`);
                 }
             }
         } catch (error) {
             console.error("Error updating queue status:", error);
+            toast.error('Failed to update status');
         }
     };
 
@@ -54,17 +59,19 @@ const PatientQueue = () => {
             <div className="flex-1 flex flex-col lg:ml-64">
                 <StaffHeader staffName="Staff User" toggleSidebar={toggleSidebar} />
 
-                <main className="flex-1 p-4 sm:p-6 lg:p-8">
+                <main className="flex-1 p-6 sm:p-8 lg:p-10 bg-[#f8fafc]">
                     {/* Page Title */}
-                    <div className="mb-6 sm:mb-8">
-                        <h1 className="text-2xl sm:text-3xl font-bold text-gray-800">Patient Queue</h1>
-                        <p className="text-gray-500">Manage patient waiting queue</p>
+                    <div className="mb-10">
+                        <h1 className="text-3xl sm:text-4xl font-extrabold text-[#0f172a] tracking-tight mb-2">Patient Queue</h1>
+                        <p className="text-lg text-[#64748b] font-medium">Manage patient waiting queue</p>
                     </div>
 
                     {/* Queue List */}
-                    <div>
+                    <div className="max-w-5xl">
                         {loading ? (
-                            <p>Loading queue...</p>
+                            <div className="flex justify-center py-12">
+                                <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                            </div>
                         ) : queueList.length > 0 ? (
                             queueList.map((item) => (
                                 <PatientQueueItem
@@ -72,13 +79,15 @@ const PatientQueue = () => {
                                     queueNumber={item.queueNumber || item.id.toString().padStart(3, '0')}
                                     patientName={item.patientName}
                                     doctorName={item.doctorName}
-                                    waitTime={item.waitTime || 'N/A'}
+                                    waitTime={item.waitTime || '0 mins'}
                                     status={item.status}
                                     onStatusChange={(status) => handleStatusChange(item.id, status)}
                                 />
                             ))
                         ) : (
-                            <p>No patients in queue.</p>
+                            <div className="bg-white rounded-2xl p-12 text-center border border-dashed border-slate-300">
+                                <p className="text-slate-400 font-medium">No patients in queue currently.</p>
+                            </div>
                         )}
                     </div>
                 </main>

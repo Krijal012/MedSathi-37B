@@ -4,6 +4,7 @@ import logo from '../../assets/logo.jpg';
 const PharmacistSidebar = ({ isOpen, toggleSidebar }) => {
     const menuItems = [
         { name: 'Dashboard', path: '/pharmacist-dashboard', icon: '🏠' },
+        { name: 'Schedule', path: '/pharmacist-schedule', icon: '📅' },
         { name: 'Add Medicine', path: '/add-medicine', icon: '✏️' },
         { name: 'Search Medicine', path: '/search-medicine', icon: '🔍' },
         { name: 'Billing', path: '/pharmacy-billing', icon: '📄' },
