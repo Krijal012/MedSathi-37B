@@ -5,11 +5,17 @@ import {
     getPatientById,
     updatePatient,
     deletePatient,
-    searchPatients
+    searchPatients,
+    getMePatient,
+    updateMePatient
 } from "../controller/patientController.js";
+
+import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
+router.get("/me", authenticate, getMePatient);
+router.put("/me", authenticate, updateMePatient);
 router.get("/search", searchPatients);
 
 router.post("/", createPatient);

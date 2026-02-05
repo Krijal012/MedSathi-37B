@@ -1,7 +1,7 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../database/db.js";
 
-export const Pharmacist = sequelize.define("Pharmacist", {
+export const Doctor = sequelize.define("Doctor", {
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
@@ -11,15 +11,9 @@ export const Pharmacist = sequelize.define("Pharmacist", {
         type: DataTypes.STRING,
         allowNull: false
     },
-    email: {
+    specialty: {
         type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
-    },
-    licenseNumber: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true
+        allowNull: false
     },
     schedule: {
         type: DataTypes.JSON,

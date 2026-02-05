@@ -70,3 +70,25 @@ export const searchPatients = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+// Get current logged in patient profile
+export const getMePatient = async (req, res) => {
+    try {
+        const patient = await Patient.findOne({ where: { email: req.user.email } });
+        if (!patient) return res.status(404).json({ success: false, message: "Patient profile not found" });
+        res.status(200).json({ success: true, data: patient });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+};
+
+// Update current logged in patient profile
+export const updateMePatient = async (req, res) => {
+    try {
+        const patient = await Patient.findOne({ where: { email: req.user.email } });
+        if (!patient) return res.status(404).json({ success: false, message: "Patient profile not found" });
+        await patient.update(req.body);
+        res.status(200).json({ success: true, data: patient });
+    } catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+};

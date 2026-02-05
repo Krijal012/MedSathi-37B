@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StaffSidebar from '../../../components/StaffComponents/StaffSideBar';
 import StaffHeader from '../../../components/StaffComponents/StaffHeader';
 import StaffStatCard from '../../../components/StaffComponents/StaffStatCard';
@@ -9,43 +9,48 @@ const StaffDashboard = () => {
 
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
-    const stats = [
-        { title: 'Patients Queue', value: '20', icon: '👥', iconColor: 'text-gray-600' },
-        { title: 'In Queue', value: '8', icon: '⏱️', iconColor: 'text-green-500' },
-        { title: 'Completed', value: '12', icon: '✅', iconColor: 'text-teal-500' },
-        { title: 'Doctors Available', value: '15', icon: '👨‍⚕️', iconColor: 'text-blue-500' },
-    ];
+    const [stats, setStats] = useState([
+        { title: 'Patients Queue', value: '0', icon: '👥', iconColor: 'text-gray-600' }, // Total appointments today
+        { title: 'In Queue', value: '0', icon: '⏱️', iconColor: 'text-green-500' }, // Confirmed appointments
+        { title: 'Completed', value: '0', icon: '✅', iconColor: 'text-teal-500' }, // Completed appointments
+        { title: 'Doctors Available', value: '0', icon: '👨‍⚕️', iconColor: 'text-blue-500' }, // Total doctors
+    ]);
 
-    const queueData = [
-        {
-            queueNumber: '001',
-            patientName: 'John Smith',
-            doctorName: 'Dr. Ram Shrestha',
-            status: 'In Progress',
-            timeElapsed: '5 Mins',
-        },
-        {
-            queueNumber: '002',
-            patientName: 'Sarah Johnson',
-            doctorName: 'Dr. Ram Shrestha',
-            status: 'In Progress',
-            timeElapsed: '5 Mins',
-        },
-        {
-            queueNumber: '003',
-            patientName: 'Mike Brown',
-            doctorName: 'Dr. Ram Shrestha',
-            status: 'In Progress',
-            timeElapsed: '5 Mins',
-        },
-        {
-            queueNumber: '004',
-            patientName: 'Emily Davis',
-            doctorName: 'Dr. Ram Shrestha',
-            status: 'In Progress',
-            timeElapsed: '5 Mins',
-        },
-    ];
+    const [queueData, setQueueData] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                // Fetch current queue
+                const queueRes = await fetch('http://localhost:5000/api/queue/current');
+                const queueJson = await queueRes.json();
+
+                let currentQueueData = [];
+                if (queueJson.success && Array.isArray(queueJson.data)) {
+                    currentQueueData = queueJson.data;
+                    setQueueData(currentQueueData);
+                }
+
+                // Fetch basic stats
+                const doctorsRes = await fetch('http://localhost:5000/api/doctors');
+                const doctorsJson = await doctorsRes.json();
+                const doctorsData = doctorsJson.success && Array.isArray(doctorsJson.data) ? doctorsJson.data : [];
+
+                setStats(prev => [
+                    { ...prev[0], value: currentQueueData.length.toString() },
+                    { ...prev[1], value: currentQueueData.filter(q => q.status === 'confirmed').length.toString() },
+                    { ...prev[2], value: currentQueueData.filter(q => q.status === 'completed').length.toString() },
+                    { ...prev[3], value: doctorsData.length.toString() }
+                ]);
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchDashboardData();
+    }, []);
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -78,16 +83,22 @@ const StaffDashboard = () => {
                     <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Current Queue</h2>
                         <div className="space-y-4">
-                            {queueData.map((queue, index) => (
-                                <StaffQueueCard
-                                    key={index}
-                                    queueNumber={queue.queueNumber}
-                                    patientName={queue.patientName}
-                                    doctorName={queue.doctorName}
-                                    status={queue.status}
-                                    timeElapsed={queue.timeElapsed}
-                                />
-                            ))}
+                            {loading ? (
+                                <p>Loading queue...</p>
+                            ) : queueData.length > 0 ? (
+                                queueData.map((queue, index) => (
+                                    <StaffQueueCard
+                                        key={index}
+                                        queueNumber={queue.queueNumber || queue.id.toString().padStart(3, '0')}
+                                        patientName={queue.patientName}
+                                        doctorName={queue.doctorName}
+                                        status={queue.status}
+                                        timeElapsed={queue.timeElapsed || 'N/A'}
+                                    />
+                                ))
+                            ) : (
+                                <p>No patients in queue currently.</p>
+                            )}
                         </div>
                     </div>
                 </main>

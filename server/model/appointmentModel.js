@@ -27,6 +27,10 @@ export const Appointment = sequelize.define("Appointment", {
         type: DataTypes.TEXT,
         allowNull: true
     },
+    providerType: {
+        type: DataTypes.STRING,
+        defaultValue: 'doctor'
+    },
     status: {
         type: DataTypes.STRING,
         defaultValue: 'pending'

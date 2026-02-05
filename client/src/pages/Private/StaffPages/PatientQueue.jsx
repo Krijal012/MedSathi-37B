@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import StaffSidebar from '../../../components/StaffComponents/StaffSideBar';
 import StaffHeader from '../../../components/StaffComponents/StaffHeader';
 import PatientQueueItem from '../../../components/StaffComponents/PatientQueueItem';
@@ -8,53 +8,42 @@ const PatientQueue = () => {
 
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
-    const queueList = [
-        {
-            id: 1,
-            queueNumber: '001',
-            patientName: 'John Smith',
-            doctorName: 'Dr. Sarah Chen',
-            waitTime: '5 mins',
-            status: 'In Progress',
-        },
-        {
-            id: 2,
-            queueNumber: '002',
-            patientName: 'Emily Johnson',
-            doctorName: 'Dr. Michael Rodriguez',
-            waitTime: '10 mins',
-            status: 'Waiting',
-        },
-        {
-            id: 3,
-            queueNumber: '003',
-            patientName: 'Robert Williams',
-            doctorName: 'Dr. James Wilson',
-            waitTime: '15 mins',
-            status: 'Waiting',
-        },
-        {
-            id: 4,
-            queueNumber: '004',
-            patientName: 'Lisa Brown',
-            doctorName: 'Dr. Emily Park',
-            waitTime: '0 mins',
-            status: 'Complete',
-        },
-        {
-            id: 5,
-            queueNumber: '005',
-            patientName: 'David Miller',
-            doctorName: 'Dr. Sarah Chen',
-            waitTime: '8 mins',
-            status: 'Waiting',
-        },
-    ];
+    const [queueList, setQueueList] = useState([]);
+    const [loading, setLoading] = useState(true);
 
-    const handleStatusChange = (id, newStatus) => {
-        console.log(`Queue ${id} status changed to:`, newStatus);
-        if (newStatus === 'complete') {
-            alert('Patient marked as complete!');
+    useEffect(() => {
+        const fetchQueue = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/queue/pharmacist');
+                const data = await response.json();
+                if (data.success) {
+                    setQueueList(data.data);
+                }
+            } catch (error) {
+                console.error("Error fetching pharmacist queue:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchQueue();
+    }, []);
+
+    const handleStatusChange = async (id, newStatus) => {
+        try {
+            const response = await fetch(`http://localhost:5000/api/queue/${id}/status`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: newStatus })
+            });
+            const data = await response.json();
+            if (data.success) {
+                setQueueList(queueList.map(item => item.id === id ? { ...item, status: newStatus } : item));
+                if (newStatus === 'complete' || newStatus === 'completed') {
+                    alert('Patient marked as complete!');
+                }
+            }
+        } catch (error) {
+            console.error("Error updating queue status:", error);
         }
     };
 
@@ -74,17 +63,23 @@ const PatientQueue = () => {
 
                     {/* Queue List */}
                     <div>
-                        {queueList.map((item) => (
-                            <PatientQueueItem
-                                key={item.id}
-                                queueNumber={item.queueNumber}
-                                patientName={item.patientName}
-                                doctorName={item.doctorName}
-                                waitTime={item.waitTime}
-                                status={item.status}
-                                onStatusChange={(status) => handleStatusChange(item.id, status)}
-                            />
-                        ))}
+                        {loading ? (
+                            <p>Loading queue...</p>
+                        ) : queueList.length > 0 ? (
+                            queueList.map((item) => (
+                                <PatientQueueItem
+                                    key={item.id}
+                                    queueNumber={item.queueNumber || item.id.toString().padStart(3, '0')}
+                                    patientName={item.patientName}
+                                    doctorName={item.doctorName}
+                                    waitTime={item.waitTime || 'N/A'}
+                                    status={item.status}
+                                    onStatusChange={(status) => handleStatusChange(item.id, status)}
+                                />
+                            ))
+                        ) : (
+                            <p>No patients in queue.</p>
+                        )}
                     </div>
                 </main>
             </div>
