@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import PharmacistSidebar from '../../../components/PharmacistComponents/PharmacistSidebar';
 import PharmacistHeader from '../../../components/PharmacistComponents/PharmacistHeader';
 
@@ -99,8 +100,8 @@ const PharmacyBilling = () => {
     };
 
     const handleGenerateBill = async () => {
-        if (!patientName) return alert("Select a patient first");
-        if (billItems.some(i => !i.medicine)) return alert("Select medicines for all items");
+        if (!patientName) return toast.error("Select a patient first");
+        if (billItems.some(i => !i.medicine)) return toast.error("Select medicines for all items");
 
         const billData = {
             patientName: patientName,
@@ -112,13 +113,13 @@ const PharmacyBilling = () => {
 
         try {
             await axios.post('http://localhost:5000/api/history', billData);
-            alert('Bill generated and recorded in patient history!');
+            toast.success('Bill generated and recorded in patient history!');
             setPatientName('');
             setSelectedPatient(null);
             setBillItems([{ id: Date.now(), medicine: '', quantity: 1, price: 0, total: 0 }]);
         } catch (error) {
             console.error("Error generating bill:", error);
-            alert('Failed to record bill.');
+            toast.error('Failed to record bill.');
         }
     };
 

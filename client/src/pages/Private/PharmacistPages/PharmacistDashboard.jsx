@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import PharmacistSidebar from '../../../components/PharmacistComponents/PharmacistSidebar';
 import PharmacistHeader from '../../../components/PharmacistComponents/PharmacistHeader';
 import PharmacistStatCard from '../../../components/PharmacistComponents/PharmacistStatcard';
@@ -61,11 +62,11 @@ const PharmacistDashboard = () => {
     const handleCompleteAppointment = async (id) => {
         try {
             await axios.patch(`http://localhost:5000/api/appointments/${id}/status`, { status: 'completed' });
-            alert('Appointment marked as completed!');
+            toast.success('Appointment marked as completed!');
             fetchDashboardData();
         } catch (error) {
             console.error("Error updating appointment:", error);
-            alert('Failed to update appointment.');
+            toast.error('Failed to update appointment.');
         }
     };
 

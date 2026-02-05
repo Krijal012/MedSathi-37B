@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 import PharmacistSidebar from '../../../components/PharmacistComponents/PharmacistSidebar';
 import PharmacistHeader from '../../../components/PharmacistComponents/PharmacistHeader';
 
@@ -28,7 +29,7 @@ const AddMedicine = () => {
         e.preventDefault();
         try {
             await axios.post('http://localhost:5000/api/medicine', formData);
-            alert('Medicine added successfully!');
+            toast.success('Medicine added successfully!');
             // Reset form
             setFormData({
                 name: '',
@@ -40,7 +41,7 @@ const AddMedicine = () => {
             });
         } catch (error) {
             console.error("Error adding medicine:", error);
-            alert('Failed to add medicine. Check console for details.');
+            toast.error('Failed to add medicine. Check console for details.');
         }
     };
 
