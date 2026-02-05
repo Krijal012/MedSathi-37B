@@ -5,9 +5,12 @@ import StepIndicator from '../../../components/PatientComponents/StepIndicator';
 import DoctorCard from '../../../components/PatientComponents/DoctorCard';
 import TimeSlot from '../../../components/PatientComponents/TimeSlot';
 import AppointmentCard from '../../../components/PatientComponents/AppointmentCard';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const BookAppointment = () => {
+    const navigate = useNavigate();
     const [currentStep, setCurrentStep] = useState(1);
     const [selectedPharmacist, setSelectedPharmacist] = useState(null);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -78,11 +81,11 @@ const BookAppointment = () => {
 
         try {
             await axios.post('http://localhost:5000/api/appointments', appointmentData);
-            alert('Appointment booked successfully!');
-            window.location.href = '/patient-dashboard';
+            toast.success('Appointment booked successfully!');
+            navigate('/patient-dashboard');
         } catch (error) {
             console.error("Error booking appointment:", error);
-            alert('Failed to book appointment.');
+            toast.error('Failed to book appointment.');
         }
     };
 

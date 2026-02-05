@@ -3,6 +3,7 @@ import { Sidebar } from '../../../components/PatientComponents/Sidebar';
 import Header from '../../../components/PatientComponents/Header';
 import MyAppointmentCard from '../../../components/PatientComponents/MyAppointmentCard';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
 const MyAppointments = () => {
     const [activeTab, setActiveTab] = useState('scheduled');
@@ -52,10 +53,10 @@ const MyAppointments = () => {
                     cancelled: data.filter(a => a.status === 'Cancelled' || a.status === 'cancelled')
                 };
                 setAppointments(categorized);
-                alert('Appointment cancelled successfully!');
+                toast.success('Appointment cancelled successfully!');
             } catch (error) {
                 console.error("Error cancelling appointment:", error);
-                alert('Failed to cancel appointment.');
+                toast.error('Failed to cancel appointment.');
             }
         }
     };
