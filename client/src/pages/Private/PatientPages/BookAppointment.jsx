@@ -197,8 +197,12 @@ const BookAppointment = () => {
                                                 className={`p-4 border-2 rounded-xl cursor-pointer transition-all ${selectedPharmacist?.id === pharm.id ? 'border-teal-500 bg-teal-50 shadow-md ring-4 ring-teal-50' : 'border-gray-100 hover:border-teal-200 hover:bg-gray-50 shadow-sm'}`}
                                             >
                                                 <div className="flex items-center gap-3 mb-3">
-                                                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center text-teal-600 text-xl font-bold">
-                                                        P
+                                                    <div className="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center overflow-hidden flex-shrink-0">
+                                                        {pharm.image ? (
+                                                            <img src={`http://localhost:5000${pharm.image}`} alt={pharm.name} className="w-full h-full object-cover" />
+                                                        ) : (
+                                                            <span className="text-teal-600 text-xl font-bold">P</span>
+                                                        )}
                                                     </div>
                                                     <div>
                                                         <p className="font-bold text-gray-800">{pharm.name}</p>

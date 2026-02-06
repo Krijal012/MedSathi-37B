@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DoctorAvailabilityCard = ({ name, specialty, rating, reviews, experience, nextAvailable, onBookNow }) => {
+const DoctorAvailabilityCard = ({ name, specialty, rating, reviews, experience, nextAvailable, onBookNow, image }) => {
     return (
         <div className="
             bg-white rounded-lg p-4 
@@ -17,13 +17,23 @@ const DoctorAvailabilityCard = ({ name, specialty, rating, reviews, experience, 
         ">
             <div className="flex items-start space-x-3 sm:space-x-4 mb-4 sm:mb-0 w-full sm:w-auto">
                 <div className="
-                    text-2xl 
-                    sm:text-3xl 
+                    w-12 h-12 
+                    sm:w-16 sm:h-16 
+                    rounded-full 
+                    overflow-hidden 
+                    bg-teal-50 
+                    border border-teal-100 
+                    flex items-center 
+                    justify-center 
                     flex-shrink-0
                 ">
-                    💊
+                    {image ? (
+                        <img src={`http://localhost:5000${image}`} alt={name} className="w-full h-full object-cover" />
+                    ) : (
+                        <span className="text-2xl sm:text-3xl">💊</span>
+                    )}
                 </div>
-                <div className="min-w-0 flex-1">
+                <div className="min-w-0 flex-1 pl-2">
                     <h4 className="
                         font-semibold text-gray-800 
                         text-base 

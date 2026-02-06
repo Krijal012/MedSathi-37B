@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DoctorCard = ({ doctorName, specialty, isSelected, onClick }) => {
+const DoctorCard = ({ doctorName, specialty, isSelected, onClick, image }) => {
     return (
         <button
             onClick={onClick}
@@ -18,11 +18,19 @@ const DoctorCard = ({ doctorName, specialty, isSelected, onClick }) => {
         >
             <div className="flex items-center space-x-2 sm:space-x-3">
                 <div className="
-                    text-xl 
-                    sm:text-2xl 
+                    w-10 h-10 
+                    sm:w-12 sm:h-12 
+                    bg-blue-50 rounded-full 
+                    flex items-center justify-center 
+                    overflow-hidden 
                     flex-shrink-0
+                    border border-blue-100
                 ">
-                    🩺
+                    {image ? (
+                        <img src={`http://localhost:5000${image}`} alt={doctorName} className="w-full h-full object-cover" />
+                    ) : (
+                        <span className="text-xl sm:text-2xl">🩺</span>
+                    )}
                 </div>
                 <div className="text-left min-w-0 flex-1">
                     <h4 className="

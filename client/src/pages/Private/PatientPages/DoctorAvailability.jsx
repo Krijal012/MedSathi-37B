@@ -102,6 +102,7 @@ const DoctorAvailability = () => {
                                     experience="5"
                                     nextAvailable="Available Now"
                                     onBookNow={() => handleBookNow(pharm.id)}
+                                    image={pharm.image}
                                 />
                             ))
                         ) : (
