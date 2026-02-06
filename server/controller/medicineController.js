@@ -70,3 +70,36 @@ export const deleteMedicine = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
+// Bulk update medicine stock (for billing)
+export const bulkUpdateStock = async (req, res) => {
+    const { items } = req.body; // Expecting [{ name: "A", quantity: 2 }, ...]
+    const transaction = await Medicine.sequelize.transaction();
+
+    try {
+        for (const item of items) {
+            const medicine = await Medicine.findOne({
+                where: { name: item.name },
+                transaction
+            });
+
+            if (!medicine) {
+                throw new Error(`Medicine ${item.name} not found`);
+            }
+
+            if (medicine.stock < item.quantity) {
+                throw new Error(`Insufficient stock for ${item.name}. Available: ${medicine.stock}`);
+            }
+
+            await medicine.update(
+                { stock: medicine.stock - item.quantity },
+                { transaction }
+            );
+        }
+
+        await transaction.commit();
+        res.status(200).json({ success: true, message: "Stock updated successfully" });
+    } catch (error) {
+        await transaction.rollback();
+        res.status(400).json({ success: false, message: error.message });
+    }
+};

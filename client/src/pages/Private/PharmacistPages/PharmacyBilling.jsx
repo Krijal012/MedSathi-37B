@@ -111,15 +111,35 @@ const PharmacyBilling = () => {
             doctorName: user?.name || "Pharmacist"
         };
 
+        const stockUpdateData = {
+            items: billItems.map(i => ({
+                name: i.medicine,
+                quantity: i.quantity
+            }))
+        };
+
         try {
+            // 1. Record in history
             await axios.post('http://localhost:5000/api/history', billData);
-            toast.success('Bill generated and recorded in patient history!');
+
+            // 2. Update stock
+            await axios.patch('http://localhost:5000/api/medicine/bulk-update-stock', stockUpdateData);
+
+            toast.success('Bill generated and stock updated successfully!');
+
+            // Reset form
             setPatientName('');
             setSelectedPatient(null);
             setBillItems([{ id: Date.now(), medicine: '', quantity: 1, price: 0, total: 0 }]);
+
+            // Refresh medicine options to reflect new stock
+            const res = await axios.get('http://localhost:5000/api/medicine');
+            setMedicineOptions(res.data.data || []);
+
         } catch (error) {
-            console.error("Error generating bill:", error);
-            toast.error('Failed to record bill.');
+            console.error("Error generating bill/updating stock:", error);
+            const errorMsg = error.response?.data?.message || 'Failed to complete transaction.';
+            toast.error(errorMsg);
         }
     };
 
