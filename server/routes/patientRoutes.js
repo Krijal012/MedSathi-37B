@@ -9,13 +9,14 @@ import {
     getMePatient,
     updateMePatient
 } from "../controller/patientController.js";
+import { upload } from "../middleware/uploadMiddleware.js";
 
 import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/me", authenticate, getMePatient);
-router.put("/me", authenticate, updateMePatient);
+router.put("/me", authenticate, upload.single("profileImage"), updateMePatient);
 router.get("/search", searchPatients);
 
 router.post("/", createPatient);

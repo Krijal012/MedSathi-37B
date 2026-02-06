@@ -32,5 +32,9 @@ export const Medicine = sequelize.define("Medicine", {
     expiryDate: {
         type: DataTypes.DATEONLY,
         allowNull: false
+    },
+    image: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 });

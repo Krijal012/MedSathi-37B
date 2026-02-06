@@ -149,6 +149,7 @@ const PharmacistDashboard = () => {
                                             category={medicine.category}
                                             stockLeft={medicine.stock}
                                             minimumRequired={20}
+                                            image={medicine.image}
                                         />
                                     ))
                                 ) : (

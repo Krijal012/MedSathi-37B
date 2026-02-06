@@ -10,8 +10,11 @@ const Header = ({ patientName = "Patient" }) => {
     const [profileData, setProfileData] = React.useState({
         age: '',
         gender: 'Male',
-        address: ''
+        address: '',
+        image: ''
     });
+    const [imageFile, setImageFile] = React.useState(null);
+    const [imagePreview, setImagePreview] = React.useState(null);
     const [loading, setLoading] = React.useState(false);
 
     const handleLogout = () => {
@@ -32,8 +35,12 @@ const Header = ({ patientName = "Patient" }) => {
                 setProfileData({
                     age: data.data.age || '',
                     gender: data.data.gender || 'Male',
-                    address: data.data.address || ''
+                    address: data.data.address || '',
+                    image: data.data.image || ''
                 });
+                if (data.data.image) {
+                    setImagePreview(`http://localhost:5000${data.data.image}`);
+                }
             }
         } catch (error) {
             console.error("Error fetching profile:", error);
@@ -42,17 +49,32 @@ const Header = ({ patientName = "Patient" }) => {
         }
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImageFile(file);
+            setImagePreview(URL.createObjectURL(file));
+        }
+    };
+
     const handleUpdateProfile = async (e) => {
         e.preventDefault();
         try {
             const token = localStorage.getItem('token');
+            const formData = new FormData();
+            formData.append('age', profileData.age);
+            formData.append('gender', profileData.gender);
+            formData.append('address', profileData.address);
+            if (imageFile) {
+                formData.append('profileImage', imageFile);
+            }
+
             const response = await fetch('http://localhost:5000/api/patients/me', {
                 method: 'PUT',
                 headers: {
-                    'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(profileData)
+                body: formData
             });
             const data = await response.json();
             if (data.success) {
@@ -86,8 +108,12 @@ const Header = ({ patientName = "Patient" }) => {
                         onClick={() => setIsProfileModalOpen(true)}
                         className="flex items-center space-x-2 p-1 hover:bg-gray-100 rounded-lg transition-colors"
                     >
-                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0">
-                            <span className="text-lg sm:text-xl">👤</span>
+                        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                            {profileData.image ? (
+                                <img src={`http://localhost:5000${profileData.image}`} alt="Profile" className="w-full h-full object-cover" />
+                            ) : (
+                                <span className="text-lg sm:text-xl">👤</span>
+                            )}
                         </div>
                         <div className="hidden md:block text-left mr-2">
                             <p className="text-sm font-medium text-gray-700">{patientName}</p>
@@ -144,6 +170,22 @@ const Header = ({ patientName = "Patient" }) => {
                                             <option value="Female">Female</option>
                                             <option value="Other">Other</option>
                                         </select>
+                                    </div>
+                                    <div className="space-y-1">
+                                        <label className="block text-sm font-semibold text-gray-700">Profile Picture</label>
+                                        <div className="flex items-center space-x-4">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleImageChange}
+                                                className="flex-1 text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition-all border border-gray-300 rounded-lg"
+                                            />
+                                            {imagePreview && (
+                                                <div className="w-12 h-12 rounded-full overflow-hidden border border-gray-200">
+                                                    <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                     <div className="space-y-1">
                                         <label className="block text-sm font-semibold text-gray-700">Current Address</label>

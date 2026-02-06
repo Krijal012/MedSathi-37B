@@ -39,5 +39,9 @@ export const Patient = sequelize.define("Patient", {
     status: {
         type: DataTypes.STRING,
         defaultValue: 'Active'
+    },
+    image: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 });

@@ -129,6 +129,9 @@ const SearchMedicine = () => {
                             <thead className="bg-gray-50 border-b border-gray-200">
                                 <tr>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
+                                        Image
+                                    </th>
+                                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
                                         Medicine
                                     </th>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">
@@ -162,6 +165,15 @@ const SearchMedicine = () => {
                                             className={`${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                                                 } hover:bg-teal-50 transition-colors`}
                                         >
+                                            <td className="px-6 py-4">
+                                                <div className="w-12 h-12 rounded-lg overflow-hidden bg-gray-50 border border-gray-100 flex items-center justify-center">
+                                                    {medicine.image ? (
+                                                        <img src={`http://localhost:5000${medicine.image}`} alt={medicine.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <span className="text-gray-400 text-xs">No Img</span>
+                                                    )}
+                                                </div>
+                                            </td>
                                             <td className="px-6 py-4 text-gray-800 font-medium">
                                                 {medicine.name}
                                             </td>

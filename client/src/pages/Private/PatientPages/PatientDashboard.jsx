@@ -137,9 +137,18 @@ const PatientDashboard = () => {
                                 <div className="space-y-3">
                                     {pharmacists.map((pharm, index) => (
                                         <div key={index} className="p-4 border rounded-lg bg-white flex justify-between items-center shadow-sm">
-                                            <div>
-                                                <p className="font-bold">{pharm.name}</p>
-                                                <p className="text-sm text-gray-600">License: {pharm.licenseNumber}</p>
+                                            <div className="flex items-center space-x-3">
+                                                <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 flex-shrink-0">
+                                                    {pharm.image ? (
+                                                        <img src={`http://localhost:5000${pharm.image}`} alt={pharm.name} className="w-full h-full object-cover" />
+                                                    ) : (
+                                                        <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-400">👤</div>
+                                                    )}
+                                                </div>
+                                                <div>
+                                                    <p className="font-bold">{pharm.name}</p>
+                                                    <p className="text-sm text-gray-600">License: {pharm.licenseNumber}</p>
+                                                </div>
                                             </div>
                                             <span className="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-medium">Verified</span>
                                         </div>

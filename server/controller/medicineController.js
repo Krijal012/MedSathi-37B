@@ -4,7 +4,11 @@ import { Op } from "sequelize";
 // Add a new medicine
 export const addMedicine = async (req, res) => {
     try {
-        const medicine = await Medicine.create(req.body);
+        const medicineData = req.body;
+        if (req.file) {
+            medicineData.image = `/uploads/medicines/${req.file.filename}`;
+        }
+        const medicine = await Medicine.create(medicineData);
         res.status(201).json({ success: true, data: medicine });
     } catch (error) {
         res.status(400).json({ success: false, message: error.message });

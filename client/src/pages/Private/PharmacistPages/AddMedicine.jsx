@@ -13,6 +13,8 @@ const AddMedicine = () => {
         price: 0,
         expiryDate: '',
     });
+    const [image, setImage] = useState(null);
+    const [imagePreview, setImagePreview] = useState(null);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
 
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
@@ -25,10 +27,26 @@ const AddMedicine = () => {
         });
     };
 
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            setImage(file);
+            setImagePreview(URL.createObjectURL(file));
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('http://localhost:5000/api/medicine', formData);
+            const data = new FormData();
+            Object.keys(formData).forEach(key => data.append(key, formData[key]));
+            if (image) {
+                data.append('medicineImage', image);
+            }
+
+            await axios.post('http://localhost:5000/api/medicine', data, {
+                headers: { 'Content-Type': 'multipart/form-data' }
+            });
             toast.success('Medicine added successfully!');
             // Reset form
             setFormData({
@@ -39,6 +57,8 @@ const AddMedicine = () => {
                 price: 0,
                 expiryDate: '',
             });
+            setImage(null);
+            setImagePreview(null);
         } catch (error) {
             console.error("Error adding medicine:", error);
             toast.error('Failed to add medicine. Check console for details.');
@@ -173,6 +193,28 @@ const AddMedicine = () => {
                                             className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
                                             required
                                         />
+                                    </div>
+                                </div>
+
+                                {/* Medicine Image */}
+                                <div className="md:col-span-2">
+                                    <label className="block text-sm font-semibold text-gray-700 mb-2">
+                                        Medicine Image
+                                    </label>
+                                    <div className="flex items-center space-x-4">
+                                        <div className="flex-1">
+                                            <input
+                                                type="file"
+                                                accept="image/*"
+                                                onChange={handleImageChange}
+                                                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-400"
+                                            />
+                                        </div>
+                                        {imagePreview && (
+                                            <div className="w-20 h-20 border rounded-lg overflow-hidden bg-gray-50">
+                                                <img src={imagePreview} alt="Preview" className="w-full h-full object-cover" />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

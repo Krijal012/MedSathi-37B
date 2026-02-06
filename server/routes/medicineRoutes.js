@@ -6,10 +6,11 @@ import {
     updateMedicine,
     deleteMedicine
 } from "../controller/medicineController.js";
+import { upload } from "../middleware/uploadMiddleware.js";
 
 const router = express.Router();
 
-router.post("/", addMedicine);
+router.post("/", upload.single("medicineImage"), addMedicine);
 router.get("/", getAllMedicines);
 router.get("/search", searchMedicines);
 router.put("/:id", updateMedicine);

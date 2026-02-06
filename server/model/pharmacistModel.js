@@ -33,5 +33,9 @@ export const Pharmacist = sequelize.define("Pharmacist", {
             Saturday: "Off",
             Sunday: "Off"
         }
+    },
+    image: {
+        type: DataTypes.STRING,
+        allowNull: true
     }
 });
