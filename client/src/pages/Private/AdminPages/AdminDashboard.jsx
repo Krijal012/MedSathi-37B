@@ -1,61 +1,50 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ActivityItem from "../../../components/AdminComponents/ActivityItem";
 import AdminHeader from "../../../components/AdminComponents/AdminHeader";
 import AdminSidebar from "../../../components/AdminComponents/AdminSideBar";
 import AdminStatCard from "../../../components/AdminComponents/AdminStat";
+import { getAdminStats, getRecentActivities } from "../../../services/adminService";
+import toast from "react-hot-toast";
 
 const AdminDashboard = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [stats, setStats] = useState([]);
+    const [recentActivities, setRecentActivities] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
-    // Stats data
-    const stats = [
-        { title: 'Total Patients', value: '1280', icon: '👥', iconColor: 'text-blue-500' },
-        { title: 'Total Staffs', value: '100', icon: '👨‍⚕️', iconColor: 'text-purple-500' },
-        { title: 'Appointments Today', value: '50', icon: '📅', iconColor: 'text-teal-500' },
-        { title: 'Monthly Revenue', value: 'Rs 100000', icon: '💵', iconColor: 'text-green-500' },
-    ];
+    useEffect(() => {
+        const fetchDashboardData = async () => {
+            try {
+                const [statsRes, activitiesRes] = await Promise.all([
+                    getAdminStats(),
+                    getRecentActivities()
+                ]);
 
-    // Recent activity data
-    const recentActivities = [
-        {
-            id: 1,
-            title: 'New Patient Registered',
-            description: 'John Smith',
-            time: '5 mins ago',
-        },
-        {
-            id: 2,
-            title: 'New Patient Registered',
-            description: 'John Smith',
-            time: '5 mins ago',
-        },
-        {
-            id: 3,
-            title: 'New Patient Registered',
-            description: 'John Smith',
-            time: '5 mins ago',
-        },
-        {
-            id: 4,
-            title: 'New Patient Registered',
-            description: 'John Smith',
-            time: '5 mins ago',
-        },
-        {
-            id: 5,
-            title: 'New Patient Registered',
-            description: 'John Smith',
-            time: '5 mins ago',
-        },
-        {
-            id: 6,
-            title: 'New Patient Registered',
-            description: 'John Smith',
-            time: '5 mins ago',
-        },
-    ];
+                if (statsRes.success) {
+                    const mappedStats = [
+                        { title: 'Total Patients', value: statsRes.data.totalPatients, icon: '👥', iconColor: 'text-blue-500' },
+                        { title: 'Total Staffs', value: statsRes.data.totalStaff, icon: '👨‍⚕️', iconColor: 'text-purple-500' },
+                        { title: 'Appointments Today', value: statsRes.data.appointmentsToday, icon: '📅', iconColor: 'text-teal-500' },
+                        { title: 'Monthly Revenue', value: statsRes.data.monthlyRevenue, icon: '💵', iconColor: 'text-green-500' },
+                    ];
+                    setStats(mappedStats);
+                }
+
+                if (activitiesRes.success) {
+                    setRecentActivities(activitiesRes.data);
+                }
+            } catch (error) {
+                console.error("Error fetching dashboard data:", error);
+                toast.error("Failed to fetch dashboard data");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchDashboardData();
+    }, []);
 
     return (
         <div className="flex min-h-screen bg-gray-100">
@@ -77,29 +66,43 @@ const AdminDashboard = () => {
 
                     {/* Stats Grid */}
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                        {stats.map((stat, index) => (
-                            <AdminStatCard
-                                key={index}
-                                title={stat.title}
-                                value={stat.value}
-                                icon={stat.icon}
-                                iconColor={stat.iconColor}
-                            />
-                        ))}
+                        {loading ? (
+                            Array(4).fill(0).map((_, i) => (
+                                <div key={i} className="bg-white p-6 rounded-lg shadow-sm animate-pulse h-32"></div>
+                            ))
+                        ) : (
+                            stats.map((stat, index) => (
+                                <AdminStatCard
+                                    key={index}
+                                    title={stat.title}
+                                    value={stat.value}
+                                    icon={stat.icon}
+                                    iconColor={stat.iconColor}
+                                />
+                            ))
+                        )}
                     </div>
 
                     {/* Recent Activity Section */}
                     <div className="bg-white rounded-lg shadow-sm border border-gray-100 p-4 sm:p-6">
                         <h2 className="text-xl sm:text-2xl font-bold text-gray-800 mb-4 sm:mb-6">Recent Activity</h2>
                         <div className="space-y-3">
-                            {recentActivities.map((activity) => (
-                                <ActivityItem
-                                    key={activity.id}
-                                    title={activity.title}
-                                    description={activity.description}
-                                    time={activity.time}
-                                />
-                            ))}
+                            {loading ? (
+                                Array(5).fill(0).map((_, i) => (
+                                    <div key={i} className="h-16 bg-gray-50 rounded-lg animate-pulse"></div>
+                                ))
+                            ) : recentActivities.length > 0 ? (
+                                recentActivities.map((activity) => (
+                                    <ActivityItem
+                                        key={activity.id}
+                                        title={activity.title}
+                                        description={activity.description}
+                                        time={activity.time}
+                                    />
+                                ))
+                            ) : (
+                                <p className="text-gray-500 text-center py-4">No recent activities found.</p>
+                            )}
                         </div>
                     </div>
                 </main>

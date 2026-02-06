@@ -23,5 +23,13 @@ export const Staff = sequelize.define("Staff", {
     designation: {
         type: DataTypes.STRING,
         allowNull: false
+    },
+    role: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    status: {
+        type: DataTypes.STRING,
+        defaultValue: 'Active'
     }
 });

@@ -12,6 +12,8 @@ import { historyRouter } from "./routes/historyRoutes.js";
 import { medicineRouter } from "./routes/medicineRoutes.js";
 import { doctorRouter } from "./routes/doctorRoutes.js";
 import { queueRouter } from "./routes/queueRoutes.js";
+import { adminRouter } from "./routes/adminRoutes.js";
+import seedAdmin from "./seedAdmin.js";
 
 // Load environment variables FIRST
 dotenv.config();
@@ -59,6 +61,7 @@ app.use("/api/history", historyRouter);
 app.use("/api/medicine", medicineRouter);
 app.use("/api/doctors", doctorRouter);
 app.use("/api/queue", queueRouter);
+app.use("/api/admin", adminRouter);
 
 // 404 handler - Must be AFTER all routes
 app.use((req, res) => {
@@ -86,6 +89,9 @@ const startServer = async () => {
     try {
         // Connect to database first
         await connection();
+
+        // Seed admin user
+        await seedAdmin();
 
         // Then start the server
         app.listen(PORT, () => {

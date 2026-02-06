@@ -27,5 +27,17 @@ export const Patient = sequelize.define("Patient", {
     address: {
         type: DataTypes.STRING,
         allowNull: true
+    },
+    phone: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    bloodGroup: {
+        type: DataTypes.STRING,
+        allowNull: true
+    },
+    status: {
+        type: DataTypes.STRING,
+        defaultValue: 'Active'
     }
 });
