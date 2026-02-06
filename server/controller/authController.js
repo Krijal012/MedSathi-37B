@@ -1,4 +1,4 @@
-// Controller/authController.js
+// controller/authController.js
 import { User } from "../model/userModel.js";
 import { Staff } from "../model/staffModel.js";
 import { Pharmacist } from "../model/pharmacistModel.js";

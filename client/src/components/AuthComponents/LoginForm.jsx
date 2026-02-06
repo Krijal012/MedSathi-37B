@@ -63,7 +63,9 @@ export function LoginForm() {
 
             // Navigate to dashboard based on user role
             const userRole = response.data.user.role;
-            if (userRole === 'staff' || userRole === 'admin' || userRole === 'doctor') {
+            if (userRole === 'admin') {
+                navigate('/admin-dashboard');
+            } else if (userRole === 'staff' || userRole === 'doctor') {
                 navigate('/staff-dashboard');
             } else if (userRole === 'pharmacist') {
                 navigate('/pharmacist-dashboard');

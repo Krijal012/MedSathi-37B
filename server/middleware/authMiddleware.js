@@ -1,15 +1,15 @@
 // middleware/authMiddleware.js
 import { verifyToken } from "../security/jwt-utils.js";
-import { User } from "../Model/userModel.js";
+import { User } from "../model/userModel.js";
 
 export const authenticate = async (req, res, next) => {
     try {
         const token = req.headers.authorization?.split(" ")[1];
-        
+
         if (!token) {
-            return res.status(401).json({ 
+            return res.status(401).json({
                 success: false,
-                message: "Access denied. No token provided." 
+                message: "Access denied. No token provided."
             });
         }
 
@@ -19,19 +19,19 @@ export const authenticate = async (req, res, next) => {
         });
 
         if (!user) {
-            return res.status(404).json({ 
+            return res.status(404).json({
                 success: false,
-                message: "User not found" 
+                message: "User not found"
             });
         }
 
         req.user = user;
         next();
     } catch (error) {
-        res.status(401).json({ 
+        res.status(401).json({
             success: false,
             message: "Invalid token",
-            error: error.message 
+            error: error.message
         });
     }
 };
@@ -39,9 +39,9 @@ export const authenticate = async (req, res, next) => {
 export const authorize = (...roles) => {
     return (req, res, next) => {
         if (!roles.includes(req.user.role)) {
-            return res.status(403).json({ 
+            return res.status(403).json({
                 success: false,
-                message: "Access denied. Insufficient permissions." 
+                message: "Access denied. Insufficient permissions."
             });
         }
         next();
