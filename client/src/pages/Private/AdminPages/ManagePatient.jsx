@@ -16,7 +16,6 @@ const ManagePatients = () => {
         name: '',
         email: '',
         phone: '',
-        bloodGroup: '',
         status: '',
         age: '',
         gender: '',
@@ -69,7 +68,6 @@ const ManagePatients = () => {
             name: patient.name || '',
             email: patient.email || '',
             phone: patient.phone || '',
-            bloodGroup: patient.bloodGroup || '',
             status: patient.status || 'Active',
             age: patient.age || '',
             gender: patient.gender || '',
@@ -152,7 +150,6 @@ const ManagePatients = () => {
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Name</th>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Email</th>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Phone</th>
-                                    <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Blood Group</th>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Status</th>
                                     <th className="px-6 py-4 text-left text-sm font-semibold text-gray-700">Actions</th>
                                 </tr>
@@ -172,7 +169,6 @@ const ManagePatients = () => {
                                             <td className="px-6 py-4 text-gray-800 font-medium">{patient.name}</td>
                                             <td className="px-6 py-4 text-gray-600">{patient.email}</td>
                                             <td className="px-6 py-4 text-gray-600">{patient.phone || 'N/A'}</td>
-                                            <td className="px-6 py-4 text-gray-600">{patient.bloodGroup || 'N/A'}</td>
                                             <td className="px-6 py-4">
                                                 <span className={`px-3 py-1 rounded-full text-sm ${patient.status === 'Active' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
                                                     }`}>
@@ -248,24 +244,6 @@ const ManagePatients = () => {
                                         onChange={(e) => setEditFormData({ ...editFormData, phone: e.target.value })}
                                         className="w-full px-4 py-2 border border-gray-200 rounded-xl outline-none"
                                     />
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-semibold text-gray-700 mb-1">Blood Group</label>
-                                    <select
-                                        value={editFormData.bloodGroup}
-                                        onChange={(e) => setEditFormData({ ...editFormData, bloodGroup: e.target.value })}
-                                        className="w-full px-4 py-2 border border-gray-200 rounded-xl outline-none"
-                                    >
-                                        <option value="">Select</option>
-                                        <option value="A+">A+</option>
-                                        <option value="A-">A-</option>
-                                        <option value="B+">B+</option>
-                                        <option value="B-">B-</option>
-                                        <option value="O+">O+</option>
-                                        <option value="O-">O-</option>
-                                        <option value="AB+">AB+</option>
-                                        <option value="AB-">AB-</option>
-                                    </select>
                                 </div>
                                 <div>
                                     <label className="block text-sm font-semibold text-gray-700 mb-1">Age</label>

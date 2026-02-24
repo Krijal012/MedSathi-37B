@@ -32,10 +32,6 @@ export const Patient = sequelize.define("Patient", {
         type: DataTypes.STRING,
         allowNull: true
     },
-    bloodGroup: {
-        type: DataTypes.STRING,
-        allowNull: true
-    },
     status: {
         type: DataTypes.STRING,
         defaultValue: 'Active'

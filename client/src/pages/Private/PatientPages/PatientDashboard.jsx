@@ -4,7 +4,6 @@ import { Sidebar } from '../../../components/PatientComponents/Sidebar';
 import Header from '../../../components/PatientComponents/Header';
 import StatCard from '../../../components/PatientComponents/StatCard';
 import AppointmentCard from '../../../components/PatientComponents/AppointmentCard';
-import HealthMetricCard from '../../../components/PatientComponents/HealthMetricCard';
 import axios from 'axios';
 
 const PatientDashboard = () => {
@@ -158,7 +157,7 @@ const PatientDashboard = () => {
                         )}
                     </div>
 
-                    {/* Health Metrics Section */}
+                    {/* Medical History Section */}
                     <div className="
                             bg-white rounded-lg 
                             shadow-sm border border-gray-100 
