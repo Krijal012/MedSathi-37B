@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const MedicalRecordCard = ({ title, date, doctorName, diagnosis, treatment, notes }) => {
+const MedicalRecordCard = ({ title, date, pharmacistName, diagnosis, treatment, notes }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
     return (
@@ -46,7 +46,7 @@ const MedicalRecordCard = ({ title, date, doctorName, diagnosis, treatment, note
                             </span>
                             <span className="hidden sm:inline">•</span>
                             <span className="flex items-center">
-                                {doctorName}
+                                {pharmacistName}
                             </span>
                         </div>
                     </div>

@@ -16,6 +16,12 @@ const AddMedicine = () => {
     const [image, setImage] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const [isSidebarOpen, setSidebarOpen] = useState(false);
+    const [user, setUser] = useState(null);
+
+    React.useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        setUser(storedUser);
+    }, []);
 
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
@@ -73,7 +79,7 @@ const AddMedicine = () => {
             {/* Main Content */}
             <div className="flex-1 flex flex-col lg:ml-64">
                 {/* Header */}
-                <PharmacistHeader pharmacistName="Pharmacist" toggleSidebar={toggleSidebar} />
+                <PharmacistHeader pharmacistName={user?.name || "Pharmacist"} toggleSidebar={toggleSidebar} />
 
                 {/* Page Content */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">

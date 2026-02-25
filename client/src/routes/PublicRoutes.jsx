@@ -14,8 +14,8 @@ const PharmacistDashboard = lazy(() => import("../pages/Private/PharmacistPages/
 const BookAppointment = lazy(() => import("../pages/Private/PatientPages/BookAppointment"));
 const MyAppointments = lazy(() => import("../pages/Private/PatientPages/MyAppointments"));
 const MedicalHistory = lazy(() => import("../pages/Private/PatientPages/MedicalHistory"));
-const DoctorAvailability = lazy(() => import("../pages/Private/PatientPages/DoctorAvailability"));
-const DoctorSchedules = lazy(() => import("../pages/Private/StaffPages/DoctorSchedules"));
+const PharmacistAvailability = lazy(() => import("../pages/Private/PatientPages/PharmacistAvailability"));
+const PharmacistSchedules = lazy(() => import("../pages/Private/StaffPages/PharmacistSchedules"));
 const PatientQueue = lazy(() => import("../pages/Private/StaffPages/PatientQueue"));
 const PatientRecords = lazy(() => import("../pages/Private/StaffPages/PatientRecords"));
 const AddMedicine = lazy(() => import("../pages/Private/PharmacistPages/AddMedicine"));
@@ -48,10 +48,10 @@ const PublicRoutes = () => {
                     <Route path="/book-appointment" element={<BookAppointment />} />
                     <Route path="/my-appointments" element={<MyAppointments />} />
                     <Route path="/medical-history" element={<MedicalHistory />} />
-                    <Route path="/doctor-availability" element={<DoctorAvailability />} />
+                    <Route path="/pharmacist-availability" element={<PharmacistAvailability />} />
                     <Route path="/staff-dashboard" element={<StaffDashboard />} />
                     <Route path="/pharmacist-dashboard" element={<PharmacistDashboard />} />
-                    <Route path="/doctor-schedule" element={<DoctorSchedules />} />
+                    <Route path="/staff/pharmacist-schedule" element={<PharmacistSchedules />} />
                     <Route path="/patient-records" element={<PatientRecords />} />
                     <Route path="/patient-queue" element={<PatientQueue />} />
                     <Route path="/add-medicine" element={<AddMedicine />} />

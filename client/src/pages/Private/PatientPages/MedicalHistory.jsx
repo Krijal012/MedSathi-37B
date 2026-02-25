@@ -30,7 +30,7 @@ const MedicalHistory = () => {
                 setMedicalRecords(data);
 
                 // Calculate stats
-                const providers = new Set(data.map(r => r.doctorName)).size;
+                const providers = new Set(data.map(r => r.pharmacistName)).size;
                 const lastRecordDate = data.length > 0 ? new Date(data[0].date).toLocaleDateString() : 'N/A';
 
                 setStats([
@@ -89,7 +89,7 @@ const MedicalHistory = () => {
                                         diagnosis={record.diagnosis}
                                         treatment={record.treatment}
                                         date={new Date(record.date).toLocaleDateString()}
-                                        doctorName={record.doctorName}
+                                        pharmacistName={record.pharmacistName}
                                     />
                                 ))
                             ) : (

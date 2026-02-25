@@ -98,7 +98,7 @@ const PatientDashboard = () => {
                                 appointments.map((appt, index) => (
                                     <AppointmentCard
                                         key={index}
-                                        providerName={appt.doctorName}
+                                        providerName={appt.pharmacistName}
                                         specialty={appt.reason || "Checkup"}
                                         date={new Date(appt.date).toLocaleDateString()}
                                         time={appt.time}
@@ -118,12 +118,12 @@ const PatientDashboard = () => {
                             )}
                         </div>
 
-                        <h2 className="text-lg sm:text-xl font-bold text-gray-800 mt-8 mb-4">Provider Availability</h2>
+                        <h2 className="text-lg sm:text-xl font-bold text-gray-800 mt-8 mb-4">Availability</h2>
                         <div className="grid grid-cols-1 gap-4 mb-6">
                             <div className="p-4 bg-green-50 rounded-lg border border-green-100">
                                 <h3 className="font-bold text-green-800 mb-2">Pharmacists ({pharmacists.length})</h3>
                                 {pharmacists.length > 0 ? (
-                                    <p className="text-sm text-green-600">Pharmacies ready to serve.</p>
+                                    <p className="text-sm text-green-600">Our pharmacists are ready to serve you.</p>
                                 ) : (
                                     <p className="text-sm text-gray-500 italic">No pharmacists registered.</p>
                                 )}
@@ -132,7 +132,7 @@ const PatientDashboard = () => {
 
                         {pharmacists.length > 0 && (
                             <>
-                                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">Available Pharmacists</h2>
+                                <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-4">Registered Pharmacists</h2>
                                 <div className="space-y-3">
                                     {pharmacists.map((pharm, index) => (
                                         <div key={index} className="p-4 border rounded-lg bg-white flex justify-between items-center shadow-sm">
@@ -149,7 +149,7 @@ const PatientDashboard = () => {
                                                     <p className="text-sm text-gray-600">License: {pharm.licenseNumber}</p>
                                                 </div>
                                             </div>
-                                            <span className="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-medium">Verified</span>
+                                            <span className="bg-teal-100 text-teal-800 text-xs px-2 py-1 rounded-full font-medium">Available</span>
                                         </div>
                                     ))}
                                 </div>
@@ -179,7 +179,7 @@ const PatientDashboard = () => {
                                         <p className="text-xs text-gray-500 mb-1">{new Date(record.date).toLocaleDateString()}</p>
                                         <p className="font-bold text-gray-800">{record.diagnosis}</p>
                                         <p className="text-sm text-gray-600 mt-1">{record.treatment}</p>
-                                        <p className="text-xs text-teal-600 mt-2 italic">By: {record.doctorName || 'Pharmacist'}</p>
+                                        <p className="text-xs text-teal-600 mt-2 italic">By: {record.pharmacistName || 'Pharmacist'}</p>
                                     </div>
                                 ))
                             ) : (

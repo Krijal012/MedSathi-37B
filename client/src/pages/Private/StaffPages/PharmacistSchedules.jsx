@@ -1,14 +1,20 @@
 import { useState, useEffect } from 'react';
 import StaffSidebar from '../../../components/StaffComponents/StaffSideBar';
 import StaffHeader from '../../../components/StaffComponents/StaffHeader';
-import DoctorScheduleCard from '../../../components/StaffComponents/DoctorScheduleCard';
+import PharmacistScheduleCard from '../../../components/StaffComponents/PharmacistScheduleCard';
 
-const DoctorSchedules = () => {
+const PharmacistSchedules = () => {
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 
+    const [user, setUser] = useState(null);
     const [professionals, setProfessionals] = useState([]);
     const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        setUser(storedUser);
+    }, []);
 
     useEffect(() => {
         const fetchSchedules = async () => {
@@ -36,7 +42,7 @@ const DoctorSchedules = () => {
             <StaffSidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
 
             <div className="flex-1 flex flex-col lg:ml-64">
-                <StaffHeader staffName="Admin User" toggleSidebar={toggleSidebar} />
+                <StaffHeader staffName={user?.name || "Staff"} toggleSidebar={toggleSidebar} />
 
                 <main className="flex-1 p-6 sm:p-8 lg:p-10 bg-[#f8fafc]">
                     {/* Page Title */}
@@ -49,18 +55,18 @@ const DoctorSchedules = () => {
                     <div className="space-y-6">
                         {loading ? (
                             <div className="flex justify-center py-12">
-                                <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+                                <div className="w-10 h-10 border-4 border-teal-500 border-t-transparent rounded-full animate-spin"></div>
                             </div>
                         ) : professionals.length > 0 ? (
                             professionals.map((pro) => (
                                 <div key={`${pro.type}-${pro.id}`} className="relative">
                                     <div className="absolute top-4 right-4 z-10">
-                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${pro.type === 'Doctor' ? 'bg-blue-100 text-blue-700' : 'bg-teal-100 text-teal-700'}`}>
+                                        <span className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-teal-100 text-teal-700`}>
                                             {pro.type}
                                         </span>
                                     </div>
-                                    <DoctorScheduleCard
-                                        doctorName={pro.name}
+                                    <PharmacistScheduleCard
+                                        pharmacistName={pro.name}
                                         specialty={pro.specialty}
                                         schedule={pro.schedule}
                                     />
@@ -68,7 +74,7 @@ const DoctorSchedules = () => {
                             ))
                         ) : (
                             <div className="bg-white rounded-2xl p-12 text-center border border-dashed border-slate-300">
-                                <p className="text-slate-400 font-medium">No staff schedules found.</p>
+                                <p className="text-slate-400 font-medium">No pharmacist schedules found.</p>
                             </div>
                         )}
                     </div>
@@ -78,4 +84,4 @@ const DoctorSchedules = () => {
     );
 };
 
-export default DoctorSchedules;
+export default PharmacistSchedules;

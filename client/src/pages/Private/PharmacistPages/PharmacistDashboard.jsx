@@ -32,7 +32,7 @@ const PharmacistDashboard = () => {
             ]);
 
             const allAppts = apptRes.data.data || [];
-            const pharmacistAppts = allAppts.filter(a => a.doctorName === storedUser.name);
+            const pharmacistAppts = allAppts.filter(a => a.pharmacistName === storedUser.name);
             setAppointments(pharmacistAppts);
 
             const allMeds = medRes.data.data || [];

@@ -11,7 +11,6 @@ import { pharmacistRouter } from "./routes/pharmacistRoutes.js";
 import { appointmentRouter } from "./routes/appointmentRoutes.js";
 import { historyRouter } from "./routes/historyRoutes.js";
 import { medicineRouter } from "./routes/medicineRoutes.js";
-import { doctorRouter } from "./routes/doctorRoutes.js";
 import { queueRouter } from "./routes/queueRoutes.js";
 import { adminRouter } from "./routes/adminRoutes.js";
 import seedAdmin from "./seedAdmin.js";
@@ -61,7 +60,6 @@ app.use("/api/pharmacists", pharmacistRouter);
 app.use("/api/appointments", appointmentRouter);
 app.use("/api/history", historyRouter);
 app.use("/api/medicine", medicineRouter);
-app.use("/api/doctors", doctorRouter);
 app.use("/api/queue", queueRouter);
 app.use("/api/admin", adminRouter);
 

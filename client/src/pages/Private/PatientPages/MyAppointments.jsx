@@ -62,7 +62,7 @@ const MyAppointments = () => {
     };
 
     const filteredAppointments = appointments[activeTab]?.filter(appt =>
-        appt.doctorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        appt.pharmacistName.toLowerCase().includes(searchQuery.toLowerCase()) ||
         (appt.reason && appt.reason.toLowerCase().includes(searchQuery.toLowerCase()))
     ) || [];
 
@@ -101,7 +101,7 @@ const MyAppointments = () => {
                                 type="text"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                placeholder="Search by provider or speciality..."
+                                placeholder="Search by pharmacist or speciality..."
                                 className="
                                     w-full 
                                     pl-10 pr-4 
@@ -186,7 +186,7 @@ const MyAppointments = () => {
                             filteredAppointments.map((appointment) => (
                                 <MyAppointmentCard
                                     key={appointment.id}
-                                    providerName={appointment.doctorName}
+                                    providerName={appointment.pharmacistName}
                                     specialty={appointment.reason || "Public Health Consultation"}
                                     date={new Date(appointment.date).toLocaleDateString()}
                                     time={appointment.time}

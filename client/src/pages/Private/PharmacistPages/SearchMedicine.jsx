@@ -12,6 +12,12 @@ const SearchMedicine = () => {
 
     const [medicines, setMedicines] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null);
+
+    React.useEffect(() => {
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+        setUser(storedUser);
+    }, []);
     const [isEditModalOpen, setEditModalOpen] = useState(false);
     const [isDeleteModalOpen, setDeleteModalOpen] = useState(false);
     const [selectedMedicine, setSelectedMedicine] = useState(null);
@@ -99,7 +105,7 @@ const SearchMedicine = () => {
             {/* Main Content */}
             <div className="flex-1 flex flex-col lg:ml-64">
                 {/* Header */}
-                <PharmacistHeader pharmacistName="Pharmacist" toggleSidebar={toggleSidebar} />
+                <PharmacistHeader pharmacistName={user?.name || "Pharmacist"} toggleSidebar={toggleSidebar} />
 
                 {/* Page Content */}
                 <main className="flex-1 p-4 sm:p-6 lg:p-8">

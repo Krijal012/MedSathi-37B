@@ -4,7 +4,7 @@ import logo from "../../assets/logo.jpg";
 const StaffSidebar = ({ isOpen, toggleSidebar }) => {
     const menuItems = [
         { name: 'Dashboard', path: '/staff-dashboard', icon: '🏠' },
-        { name: 'Doctor Schedule', path: '/doctor-schedule', icon: '📅' },
+        { name: 'Pharmacist Schedule', path: '/staff/pharmacist-schedule', icon: '📅' },
         { name: 'Patient Records', path: '/patient-records', icon: '📁' },
         { name: 'Patient Queue', path: '/patient-queue', icon: '⏱️' },
     ];

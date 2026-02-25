@@ -23,7 +23,7 @@ export const MedicalHistory = sequelize.define("MedicalHistory", {
         type: DataTypes.TEXT,
         allowNull: false
     },
-    doctorName: {
+    pharmacistName: {
         type: DataTypes.STRING,
         allowNull: true
     }

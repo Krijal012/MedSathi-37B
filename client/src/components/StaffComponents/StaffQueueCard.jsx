@@ -1,6 +1,6 @@
 import React from 'react';
 
-const StaffQueueCard = ({ queueNumber, patientName, doctorName, status, timeElapsed }) => {
+const StaffQueueCard = ({ queueNumber, patientName, pharmacistName, status, timeElapsed }) => {
     return (
         <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 flex flex-col sm:flex-row sm:items-center sm:justify-between hover:shadow-md transition-shadow space-y-3 sm:space-y-0">
             <div className="flex items-center space-x-4">
@@ -9,7 +9,7 @@ const StaffQueueCard = ({ queueNumber, patientName, doctorName, status, timeElap
                 </div>
                 <div>
                     <h4 className="font-semibold text-gray-800 text-base sm:text-lg">{patientName}</h4>
-                    <p className="text-sm text-gray-500">{doctorName}</p>
+                    <p className="text-sm text-gray-500">{pharmacistName}</p>
                 </div>
             </div>
             <div className="text-right flex sm:flex-col items-end justify-between">

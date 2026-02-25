@@ -1,6 +1,6 @@
 import React from 'react';
 
-const DoctorCard = ({ doctorName, specialty, isSelected, onClick, image }) => {
+const PharmacistCard = ({ pharmacistName, specialty, isSelected, onClick, image }) => {
     return (
         <button
             onClick={onClick}
@@ -11,8 +11,8 @@ const DoctorCard = ({ doctorName, specialty, isSelected, onClick, image }) => {
                 border-2 transition-all 
                 hover:shadow-md
                 ${isSelected
-                    ? 'border-blue-400 bg-blue-50'
-                    : 'border-gray-200 hover:border-blue-300'
+                    ? 'border-teal-400 bg-teal-50'
+                    : 'border-gray-200 hover:border-teal-300'
                 }
             `}
         >
@@ -20,16 +20,16 @@ const DoctorCard = ({ doctorName, specialty, isSelected, onClick, image }) => {
                 <div className="
                     w-10 h-10 
                     sm:w-12 sm:h-12 
-                    bg-blue-50 rounded-full 
+                    bg-teal-50 rounded-full 
                     flex items-center justify-center 
                     overflow-hidden 
                     flex-shrink-0
-                    border border-blue-100
+                    border border-teal-100
                 ">
                     {image ? (
-                        <img src={`http://localhost:5000${image}`} alt={doctorName} className="w-full h-full object-cover" />
+                        <img src={`http://localhost:5000${image}`} alt={pharmacistName} className="w-full h-full object-cover" />
                     ) : (
-                        <span className="text-xl sm:text-2xl">🩺</span>
+                        <span className="text-xl sm:text-2xl">💊</span>
                     )}
                 </div>
                 <div className="text-left min-w-0 flex-1">
@@ -39,10 +39,10 @@ const DoctorCard = ({ doctorName, specialty, isSelected, onClick, image }) => {
                         sm:text-base 
                         truncate
                     ">
-                        {doctorName}
+                        {pharmacistName}
                     </h4>
                     <p className="text-xs sm:text-sm text-gray-500 truncate">
-                        {specialty}
+                        {specialty || "Pharmacist"}
                     </p>
                 </div>
             </div>
@@ -50,4 +50,4 @@ const DoctorCard = ({ doctorName, specialty, isSelected, onClick, image }) => {
     );
 };
 
-export default DoctorCard;
+export default PharmacistCard;

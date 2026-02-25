@@ -59,7 +59,7 @@ export const getRecentActivities = async (req, res) => {
             ...latestAppointments.map(a => ({
                 id: `a-${a.id}`,
                 title: 'Appointment Booked',
-                description: `Patient: ${a.patientName} with Dr. ${a.doctorName}`,
+                description: `Patient: ${a.patientName} with Pharm. ${a.pharmacistName}`,
                 time: 'Recently',
                 type: 'appointment'
             }))

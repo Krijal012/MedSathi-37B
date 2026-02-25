@@ -60,7 +60,7 @@ function Landing() {
                     </h1>
 
                     <p className="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">
-                        Manage health records, connect with doctors, and take control of your wellness journey.
+                        Manage health records, connect with pharmacists, and take control of your wellness journey.
                     </p>
 
                     <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center pt-4">
@@ -82,7 +82,7 @@ function Landing() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-12 max-w-3xl mx-auto">
                         {[
                             { icon: '🏥', title: 'Health Records', desc: 'Store and access your medical history' },
-                            { icon: '👨‍⚕️', title: 'Find Doctors', desc: 'Connect with trusted healthcare providers' },
+                            { icon: '💊', title: 'Find Pharmacists', desc: 'Connect with trusted pharmacy professionals' },
                             { icon: '💊', title: 'Track Medications', desc: 'Manage prescriptions and reminders' }
                         ].map((item, index) => (
                             <div
@@ -102,7 +102,7 @@ function Landing() {
             {/* Footer */}
             <footer className="bg-white border-t border-gray-200 py-6 relative z-10">
                 <div className="max-w-7xl mx-auto px-6 text-center text-xs sm:text-sm text-gray-600">
-                    © 2024 MedSathi. All rights reserved.
+                    © 2026 MedSathi. All rights reserved.
                 </div>
             </footer>
 

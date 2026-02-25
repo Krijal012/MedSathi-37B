@@ -108,7 +108,7 @@ const PharmacyBilling = () => {
             date: new Date().toISOString().split('T')[0],
             diagnosis: "Pharmacy Purchase",
             treatment: billItems.map(i => `${i.medicine} (Qty: ${i.quantity})`).join(', '),
-            doctorName: user?.name || "Pharmacist"
+            pharmacistName: user?.name || "Pharmacist"
         };
 
         const stockUpdateData = {

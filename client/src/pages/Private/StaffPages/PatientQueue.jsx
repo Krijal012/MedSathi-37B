@@ -78,7 +78,7 @@ const PatientQueue = () => {
                                     key={item.id}
                                     queueNumber={item.queueNumber || item.id.toString().padStart(3, '0')}
                                     patientName={item.patientName}
-                                    doctorName={item.doctorName}
+                                    pharmacistName={item.pharmacistName}
                                     waitTime={item.waitTime || '0 mins'}
                                     status={item.status}
                                     onStatusChange={(status) => handleStatusChange(item.id, status)}

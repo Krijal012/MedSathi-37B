@@ -10,7 +10,7 @@ export const Sidebar = ({ isOpen, toggleSidebar }) => {
         { name: 'Book Appointment', path: '/book-appointment', icon: '📅' },
         { name: 'My Appointments', path: '/my-appointments', icon: '📋' },
         { name: 'Medical History', path: '/medical-history', icon: '📄' },
-        { name: 'Pharmacist Availability', path: '/doctor-availability', icon: '👨‍🔬' },
+        { name: 'Pharmacist Availability', path: '/pharmacist-availability', icon: '👨‍🔬' },
     ];
 
     const isActive = (path) => location.pathname === path;

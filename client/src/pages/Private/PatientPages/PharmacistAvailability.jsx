@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Sidebar } from '../../../components/PatientComponents/Sidebar';
 import Header from '../../../components/PatientComponents/Header';
-import DoctorAvailabilityCard from '../../../components/PatientComponents/DoctorAvailabilityCard';
+import PharmacistAvailabilityCard from '../../../components/PatientComponents/PharmacistAvailabilityCard';
 
-const DoctorAvailability = () => {
+const PharmacistAvailability = () => {
     const navigate = useNavigate();
     const [isSidebarOpen, setSidebarOpen] = useState(false);
     const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
@@ -95,7 +95,7 @@ const DoctorAvailability = () => {
                             <p className="text-gray-500 italic">Finding registered pharmacists...</p>
                         ) : filteredPharmacists.length > 0 ? (
                             filteredPharmacists.map((pharm) => (
-                                <DoctorAvailabilityCard
+                                <PharmacistAvailabilityCard
                                     key={pharm.id}
                                     name={pharm.name}
                                     specialty="Registered Pharmacist"
@@ -115,4 +115,4 @@ const DoctorAvailability = () => {
     );
 };
 
-export default DoctorAvailability;
+export default PharmacistAvailability;

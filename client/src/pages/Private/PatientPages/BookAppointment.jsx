@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Sidebar } from '../../../components/PatientComponents/Sidebar';
 import Header from '../../../components/PatientComponents/Header';
 import StepIndicator from '../../../components/PatientComponents/StepIndicator';
-import DoctorCard from '../../../components/PatientComponents/DoctorCard';
+import PharmacistCard from '../../../components/PatientComponents/PharmacistCard';
 import TimeSlot from '../../../components/PatientComponents/TimeSlot';
 import AppointmentCard from '../../../components/PatientComponents/AppointmentCard';
 import { useNavigate } from 'react-router-dom';
@@ -124,7 +124,7 @@ const BookAppointment = () => {
     const handleSubmit = async () => {
         const appointmentData = {
             patientName: user?.name || "Anonymous Patient",
-            doctorName: selectedPharmacist?.name, // Keeping the field name for backend compatibility if needed, or mapping it
+            pharmacistName: selectedPharmacist?.name,
             providerType: 'pharmacist',
             date: selectedDate,
             time: selectedTime,
@@ -557,7 +557,7 @@ const BookAppointment = () => {
                                     {appointments.map((appt, index) => (
                                         <AppointmentCard
                                             key={index}
-                                            providerName={appt.doctorName}
+                                            providerName={appt.pharmacistName}
                                             specialty={appt.reason || "Pharmacy Consultation"}
                                             date={new Date(appt.date).toLocaleDateString()}
                                             time={appt.time}
