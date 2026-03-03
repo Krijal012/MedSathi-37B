@@ -23,16 +23,22 @@ export function RegisterForm() {
   // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    let processedValue = value;
+    if (name === 'fullName') {
+      // Allow only letters and spaces. The input's maxLength attribute will handle the length limit.
+      processedValue = value.replace(/[^a-zA-Z ]/g, '');
+    }
+
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: processedValue
     }));
 
     // Clear error when user types
-    setErrors(prev => ({
-      ...prev,
-      [name]: ''
-    }));
+    if (errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: '' }));
+    }
   };
 
   // Handle form submission
@@ -101,6 +107,7 @@ export function RegisterForm() {
               name="fullName"
               value={formData.fullName}
               onChange={handleChange}
+              maxLength={30}
               placeholder="John Doe"
               className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500 focus:border-transparent"
             />

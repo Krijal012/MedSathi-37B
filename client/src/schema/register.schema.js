@@ -4,8 +4,19 @@ export const RegisterSchema = z
     registerAs: z.enum(["patient", "staff", "pharmacist"], {
       errorMap: () => ({ message: "Please select a role" }),
     }),
-    fullName: z.string().nonempty({ message: "Full Name is required" }),
-    email: z.string().nonempty({ message: "Email is required" }).email({ message: "Invalid email" }),
+    fullName: z
+      .string()
+      .trim()
+      .min(2, { message: "Full Name must be at least 2 characters" })
+      .max(30, { message: "Full Name must not exceed 30 characters" })
+      .regex(/^[a-zA-Z ]+$/, {
+        message: "Full Name can only contain letters and spaces",
+      }),
+    email: z
+      .string()
+      .trim()
+      .nonempty({ message: "Email is required" })
+      .email({ message: "Please enter a valid email address" }),
     password: z
       .string()
       .nonempty({ message: "Password is required" })
